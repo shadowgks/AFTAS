@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.Type;
+
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,6 +29,5 @@ public class Member {
     private IdentityDocumentType identityDocumentType;
     private String identityNumber;
     @OneToMany(mappedBy = "member")
-    @Column(nullable = true)
     private List<Ranking> rankings;
 }
