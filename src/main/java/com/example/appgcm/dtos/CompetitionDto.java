@@ -1,6 +1,5 @@
-package com.example.appgcm.dtos.competitionDto;
+package com.example.appgcm.dtos;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 
@@ -8,7 +7,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Builder
-public record CompetitionCreationReqDto(
+public record CompetitionDto(
+        Long id,
+        String code,
         @NotNull(message = "Name cannot be null")
         @Future(message = "Date must be in the future")
         LocalDate date,

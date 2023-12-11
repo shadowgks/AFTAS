@@ -27,6 +27,7 @@ public class Member {
     private LocalDate accessionDate;
     private String nationality;
     private IdentityDocumentType identityDocumentType;
+    @Column(unique = true)
     private String identityNumber;
     @OneToMany(mappedBy = "member")
     private List<Ranking> rankings;
