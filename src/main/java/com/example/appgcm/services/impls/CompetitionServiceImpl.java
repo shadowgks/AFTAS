@@ -63,18 +63,37 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
     @Override
-    public void deleteCompetition(String code) {
-        Optional<Competition> competition = Optional.ofNullable(competitionRepository.findByCode(code)
+    public void deleteCompetition(Long id) {
+        Optional<Competition> competition = Optional.ofNullable(competitionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Not found")));
-        competition.ifPresent(get -> competitionRepository.deleteById(get.getId()));
+        competition.ifPresent(get -> competitionRepository.deleteById(id));
     }
 
     @Override
-    public void updateCompetition(String code, CompetitionDto competitionDto) {
-        Optional<Competition> competition = Optional.ofNullable(competitionRepository.findByCode(code))
+    public void updateCompetition(Long id, CompetitionDto reqDto) {
+        Optional<Competition> competition = Optional.of(competitionRepository.findById(id))
                 .orElseThrow(() -> new IllegalArgumentException("Not Found"));
         if(competition.isPresent()){
-            competitionRepository.save(competition.get());
+            // Substring location
+            String locationSplit = reqDto.location().substring(0,3).toLowerCase();
+
+            // Format the date
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("-yy-MM-dd");
+            String formattedDate = reqDto.date().format(outputFormatter);
+            String codeDone = locationSplit.concat(formattedDate);
+
+            //Builder Competition
+            Competition competition1 = Competition.builder()
+                    .id(competition.get().getId())
+                    .code(codeDone)
+                    .amount(reqDto.amount())
+                    .date(reqDto.date())
+                    .startTime(reqDto.startTime())
+                    .endTime(reqDto.endTime())
+                    .numberOfParticipants(reqDto.numberOfParticipants())
+                    .location(reqDto.location())
+                    .build();
+            competitionRepository.save(competition1);
         }
     }
 }

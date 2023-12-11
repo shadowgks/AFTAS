@@ -45,15 +45,15 @@ public class CompetitionController {
         return ResponseEntity.ok(competitionDto);
     }
 
-    @PutMapping("{code}")
-    public ResponseEntity<Optional<CompetitionDto>> updateCompetitionByCode(@Valid @PathVariable("code") String code, @RequestBody CompetitionDto reqDto){
-        competitionService.updateCompetition(code, reqDto);
+    @PutMapping("{id}")
+    public ResponseEntity<Optional<CompetitionDto>> updateCompetitionByCode(@Valid @PathVariable("id") Long id, @RequestBody CompetitionDto reqDto){
+        competitionService.updateCompetition(id, reqDto);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/delete/{code}")
-    public ResponseEntity<CompetitionDto> deleteCompetitionByCode(@Valid @PathVariable("code") String code){
-        competitionService.deleteCompetition(code);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<CompetitionDto> deleteCompetitionByCode(@Valid @PathVariable("id") Long id){
+        competitionService.deleteCompetition(id);
         return ResponseEntity.noContent().build();
     }
 }

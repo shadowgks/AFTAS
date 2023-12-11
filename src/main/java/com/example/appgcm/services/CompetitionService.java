@@ -12,6 +12,6 @@ public interface CompetitionService {
     Optional<CompetitionDto> findByDateCompetition(LocalDate date);
     Optional<CompetitionDto> findByCodeCompetition(String code);
     Competition saveCompetition(CompetitionDto competition);
-    void deleteCompetition(String code);
-    void updateCompetition(String code, CompetitionDto competitionDto);
+    void deleteCompetition(Long id);
+    void updateCompetition(Long id, CompetitionDto competitionDto);
 }
