@@ -1,7 +1,6 @@
 package com.example.appgcm.services.impls;
 
 import com.example.appgcm.dtos.CompetitionDto;
-import com.example.appgcm.mapper.CompetitionMapper;
 import com.example.appgcm.models.entity.Competition;
 import com.example.appgcm.repositories.CompetitionRepository;
 import com.example.appgcm.services.CompetitionService;
@@ -19,24 +18,22 @@ public class CompetitionServiceImpl implements CompetitionService {
     private final CompetitionRepository competitionRepository;
 
     @Override
-    public Optional<List<CompetitionDto>> findAllCompetition() {
-        return Optional.of(competitionRepository.findAll()
-                .stream().map(CompetitionMapper::mapToDto)
-                .toList());
+    public List<Competition> findAllCompetition() {
+        return competitionRepository.findAll();
     }
 
     @Override
-    public Optional<CompetitionDto> findByDateCompetition(LocalDate date) {
+    public Competition findByDateCompetition(LocalDate date) {
         Optional<Competition> competition = Optional.ofNullable(competitionRepository.findByDate(date)
-                .orElseThrow(() -> new IllegalArgumentException("Not Found")));
-        return Optional.ofNullable(CompetitionMapper.mapToDto(competition.get()));
+                .orElseThrow(() -> new IllegalArgumentException("Not found Competition By Date")));
+        return competition.get();
     }
 
     @Override
-    public Optional<CompetitionDto> findByCodeCompetition(String code) {
-        Optional<Competition> competition = Optional.ofNullable(competitionRepository.findByCode(code)
-                .orElseThrow(() -> new IllegalArgumentException("Not Found")));
-        return Optional.ofNullable(CompetitionMapper.mapToDto(competition.get()));
+    public Competition findByCodeCompetition(String code) {
+         Optional<Competition> competition = Optional.ofNullable(competitionRepository.findByCode(code)
+                .orElseThrow(() -> new IllegalArgumentException("Not found Competition By Code  ")));
+        return competition.get();
     }
 
     @Override
@@ -65,14 +62,14 @@ public class CompetitionServiceImpl implements CompetitionService {
     @Override
     public void deleteCompetition(Long id) {
         Optional<Competition> competition = Optional.ofNullable(competitionRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Not found")));
+                .orElseThrow(() -> new IllegalArgumentException("Not found Competition")));
         competition.ifPresent(get -> competitionRepository.deleteById(id));
     }
 
     @Override
-    public void updateCompetition(Long id, CompetitionDto reqDto) {
+    public Competition updateCompetition(Long id, CompetitionDto reqDto) {
         Optional<Competition> competition = Optional.of(competitionRepository.findById(id))
-                .orElseThrow(() -> new IllegalArgumentException("Not Found"));
+                .orElseThrow(() -> new IllegalArgumentException("Not found Competition"));
         if(competition.isPresent()){
             // Substring location
             String locationSplit = reqDto.location().substring(0,3).toLowerCase();
@@ -93,7 +90,8 @@ public class CompetitionServiceImpl implements CompetitionService {
                     .numberOfParticipants(reqDto.numberOfParticipants())
                     .location(reqDto.location())
                     .build();
-            competitionRepository.save(competition1);
+            return competitionRepository.save(competition1);
         }
+        throw new IllegalArgumentException("Something Not good");
     }
 }

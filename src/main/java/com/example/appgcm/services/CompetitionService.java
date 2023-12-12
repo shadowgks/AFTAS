@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CompetitionService {
-    Optional<List<CompetitionDto>> findAllCompetition();
-    Optional<CompetitionDto> findByDateCompetition(LocalDate date);
-    Optional<CompetitionDto> findByCodeCompetition(String code);
+    List<Competition> findAllCompetition();
+    Competition findByDateCompetition(LocalDate date);
+    Competition findByCodeCompetition(String code);
     Competition saveCompetition(CompetitionDto competition);
     void deleteCompetition(Long id);
-    void updateCompetition(Long id, CompetitionDto competitionDto);
+    Competition updateCompetition(Long id, CompetitionDto competitionDto);
 }
