@@ -8,6 +8,7 @@ import com.example.appgcm.services.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +35,15 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member saveMember(MemberDto member) {
-        return null;
+        Member member1 = Member.builder()
+                .num(member.num())
+                .firstName(member.firstName())
+                .lastName(member.lastName())
+                .accessionDate(LocalDate.now())
+                .nationality(member.nationality())
+                .identityDocumentType(member.identityDocumentType())
+                .identityNumber(member.identityNumber())
+                .build();
+        return memberRepository.save(member1);
     }
 }

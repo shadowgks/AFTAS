@@ -80,28 +80,26 @@ public class CompetitionServiceImpl implements CompetitionService {
     public Competition updateCompetition(Long id, CompetitionDto reqDto) {
         Optional<Competition> competition = Optional.of(competitionRepository.findById(id))
                 .orElseThrow(() -> new IllegalArgumentException("Not found Competition"));
-        if(competition.isPresent()){
-            // Substring location
-            String locationSplit = reqDto.location().substring(0,3).toLowerCase();
 
-            // Format the date
-            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("-yy-MM-dd");
-            String formattedDate = reqDto.date().format(outputFormatter);
-            String codeDone = locationSplit.concat(formattedDate);
+        // Substring location
+        String locationSplit = reqDto.location().substring(0,3).toLowerCase();
 
-            //Builder Competition
-            Competition competition1 = Competition.builder()
-                    .id(competition.get().getId())
-                    .code(codeDone)
-                    .amount(reqDto.amount())
-                    .date(reqDto.date())
-                    .startTime(reqDto.startTime())
-                    .endTime(reqDto.endTime())
-                    .numberOfParticipants(reqDto.numberOfParticipants())
-                    .location(reqDto.location())
-                    .build();
-            return competitionRepository.save(competition1);
-        }
-        throw new IllegalArgumentException("Something Not good");
+        // Format the date
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("-yy-MM-dd");
+        String formattedDate = reqDto.date().format(outputFormatter);
+        String codeDone = locationSplit.concat(formattedDate);
+
+        //Builder Competition
+        Competition competition1 = Competition.builder()
+                .id(competition.get().getId())
+                .code(codeDone)
+                .amount(reqDto.amount())
+                .date(reqDto.date())
+                .startTime(reqDto.startTime())
+                .endTime(reqDto.endTime())
+                .numberOfParticipants(reqDto.numberOfParticipants())
+                .location(reqDto.location())
+                .build();
+        return competitionRepository.save(competition1);
     }
 }
