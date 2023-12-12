@@ -1,4 +1,4 @@
-package com.example.appgcm.web.controllers;
+package com.example.appgcm.rest.controllers;
 
 import com.example.appgcm.dtos.CompetitionDto;
 import com.example.appgcm.mapper.CompetitionMapper;
@@ -38,7 +38,6 @@ public class CompetitionController {
                 .stream()
                 .map(CompetitionMapper::mapToDto)
                 .toList());
-        listResponse.setMessage("Found All Competition");
         return ResponseEntity.ok(listResponse);
     }
 

@@ -22,6 +22,7 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Integer num;
     private String firstName;
     private String lastName;
     private LocalDate accessionDate;
@@ -30,5 +31,5 @@ public class Member {
     @Column(unique = true)
     private String identityNumber;
     @OneToMany(mappedBy = "member")
-    private List<Ranking> rankings;
+    private List<Ranking> competitions;
 }

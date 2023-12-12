@@ -2,6 +2,7 @@ package com.example.appgcm.services.impls;
 
 import com.example.appgcm.dtos.CompetitionDto;
 import com.example.appgcm.models.entity.Competition;
+import com.example.appgcm.models.entity.Member;
 import com.example.appgcm.repositories.CompetitionRepository;
 import com.example.appgcm.services.CompetitionService;
 import lombok.RequiredArgsConstructor;
@@ -19,20 +20,24 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     @Override
     public List<Competition> findAllCompetition() {
-        return competitionRepository.findAll();
+        List<Competition> competitionList = competitionRepository.findAll();
+        if (competitionList.isEmpty()) {
+            throw new IllegalArgumentException("Not Found Any Competition");
+        }
+        return competitionList;
     }
 
     @Override
     public Competition findByDateCompetition(LocalDate date) {
         Optional<Competition> competition = Optional.ofNullable(competitionRepository.findByDate(date)
-                .orElseThrow(() -> new IllegalArgumentException("Not found Competition By Date")));
+                .orElseThrow(() -> new IllegalArgumentException("Not found Competition By Date " +date)));
         return competition.get();
     }
 
     @Override
     public Competition findByCodeCompetition(String code) {
          Optional<Competition> competition = Optional.ofNullable(competitionRepository.findByCode(code)
-                .orElseThrow(() -> new IllegalArgumentException("Not found Competition By Code  ")));
+                .orElseThrow(() -> new IllegalArgumentException("Not found Competition By Code " +code)));
         return competition.get();
     }
 
@@ -45,6 +50,11 @@ public class CompetitionServiceImpl implements CompetitionService {
         DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("-yy-MM-dd");
         String formattedDate = reqDto.date().format(outputFormatter);
         String codeDone = locationSplit.concat(formattedDate);
+
+        // Check Time
+        if(reqDto.endTime().isBefore(reqDto.startTime())){
+            throw new IllegalArgumentException("Check start time and end time");
+        }
 
         //Builder Competition
         Competition competition = Competition.builder()
