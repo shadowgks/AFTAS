@@ -19,22 +19,18 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler({IllegalArgumentException.class})
-    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(Exception ex, HttpServletRequest request){
-        ErrorResponse errorResponse = new ErrorResponse(
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
-                HttpStatus.BAD_REQUEST.value(),
-                HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                ex.getMessage(),
-                request.getRequestURI()
-        );
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Response<?>> handleIllegalArgumentException(Exception ex){
+        Response<?> response = new Response<>();
+        String getErrorMessage = ex.getMessage();
+        response.setError(getErrorMessage);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> handleArgumentNotValid(MethodArgumentNotValidException request){
+    @ExceptionHandler({MethodArgumentNotValidException.class})
+    public ResponseEntity<Response<?>> handleArgumentNotValid(MethodArgumentNotValidException requests){
         Response<?> response = new Response<>();
         Map<String, String> errors = new HashMap<>();
-        request.getBindingResult().getFieldErrors().forEach(
+        requests.getBindingResult().getFieldErrors().forEach(
                 e -> {
                     errors.put(e.getField(), e.getDefaultMessage());
                 }

@@ -1,8 +1,12 @@
 package com.example.appgcm.rest.controllers;
 
 import com.example.appgcm.dtos.CompetitionDto;
+import com.example.appgcm.dtos.RankingDto.Response.RankingResDto;
+import com.example.appgcm.dtos.RegisterMemberOnCompetitionDto;
 import com.example.appgcm.mapper.CompetitionMapper;
+import com.example.appgcm.mapper.RankingMapper;
 import com.example.appgcm.models.entity.Competition;
+import com.example.appgcm.models.entity.Ranking;
 import com.example.appgcm.services.CompetitionService;
 import com.example.appgcm.utils.Response;
 import jakarta.validation.Valid;
@@ -31,8 +35,12 @@ public class CompetitionController {
     }
 
     @PostMapping("/register_member")
-    public ResponseEntity<Response<?>> registerMember(@Valid @RequestBody){
-        return null;
+    public ResponseEntity<Response<RankingResDto>> registerMember(@Valid @RequestBody RegisterMemberOnCompetitionDto reqDto){
+        Response<RankingResDto> response = new Response<>();
+        Ranking ranking = competitionService.registerMember(reqDto);
+        response.setResult(RankingMapper.mapToDto(ranking));
+        response.setMessage("Registered member in competition successfully");
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping

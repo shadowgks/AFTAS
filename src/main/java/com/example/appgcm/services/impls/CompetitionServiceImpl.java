@@ -1,9 +1,13 @@
 package com.example.appgcm.services.impls;
 
 import com.example.appgcm.dtos.CompetitionDto;
+import com.example.appgcm.dtos.HuntingDto.Requests.HuntingReqDto;
+import com.example.appgcm.dtos.RegisterMemberOnCompetitionDto;
 import com.example.appgcm.models.entity.Competition;
 import com.example.appgcm.models.entity.Member;
-import com.example.appgcm.repositories.CompetitionRepository;
+import com.example.appgcm.models.entity.Ranking;
+import com.example.appgcm.models.entity.embedded.MemberCompetition;
+import com.example.appgcm.repositories.*;
 import com.example.appgcm.services.CompetitionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +20,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class CompetitionServiceImpl implements CompetitionService {
+    private final MemberRepository memberRepository;
     private final CompetitionRepository competitionRepository;
+    private final RankingRepository rankingRepository;
 
     @Override
     public List<Competition> findAllCompetition() {
@@ -79,7 +85,7 @@ public class CompetitionServiceImpl implements CompetitionService {
     @Override
     public Competition updateCompetition(Long id, CompetitionDto reqDto) {
         Optional<Competition> competition = Optional.of(competitionRepository.findById(id))
-                .orElseThrow(() -> new IllegalArgumentException("Not found Competition"));
+                .orElseThrow(() -> new IllegalArgumentException("Not found this Competition!"));
 
         // Substring location
         String locationSplit = reqDto.location().substring(0,3).toLowerCase();
@@ -101,5 +107,35 @@ public class CompetitionServiceImpl implements CompetitionService {
                 .location(reqDto.location())
                 .build();
         return competitionRepository.save(competition1);
+    }
+
+    @Override
+    public Ranking registerMember(RegisterMemberOnCompetitionDto reqDto) {
+        Optional<Competition> competition = Optional.ofNullable(competitionRepository.findById(reqDto.competition_id())
+                .orElseThrow(() -> new IllegalArgumentException("Sorry this competition not exists!")));
+        Optional<Member> member = Optional.ofNullable(memberRepository.findById(reqDto.member_id())
+                .orElseThrow(() -> new IllegalArgumentException("Sorry this member not exists!")));
+
+        // Check if member already registered on competition
+        Optional<Ranking> ranking = rankingRepository.findByMemberAndCompetition(member.get(), competition.get());
+        if (ranking.isPresent()){
+            throw new IllegalArgumentException("This member is already registered for this competition!");
+        }
+
+        // Check date registered before 24h in competition
+        //...
+
+        // Now create ranking
+        Ranking ranking1 = Ranking.builder()
+                .id(MemberCompetition.builder()
+                        .competitionID(member.get().getId())
+                        .memberID(competition.get().getId())
+                        .build())
+                .member(member.get())
+                .competition(competition.get())
+                .rankk(0)
+                .score(0)
+                .build();
+        return rankingRepository.save(ranking1);
     }
 }
