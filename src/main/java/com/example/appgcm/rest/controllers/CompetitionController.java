@@ -30,6 +30,11 @@ public class CompetitionController {
         return new ResponseEntity<>(competitionDtoResponse, HttpStatus.CREATED);
     }
 
+    @PostMapping("/register_member")
+    public ResponseEntity<Response<?>> registerMember(@Valid @RequestBody){
+        return null;
+    }
+
     @GetMapping
     public ResponseEntity<Response<List<CompetitionDto>>> getAllCompetition(){
         Response<List<CompetitionDto>> listResponse = new Response<>();
