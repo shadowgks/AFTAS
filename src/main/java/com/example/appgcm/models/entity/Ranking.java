@@ -1,5 +1,6 @@
 package com.example.appgcm.models.entity;
 
+import com.example.appgcm.models.entity.embedded.MemberCompetition;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,16 +13,17 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class Ranking {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    private MemberCompetition id;
     private Integer score;
     private Integer rankk;
     @ManyToOne
     @JoinColumn(name = "member_id")
+    @MapsId("memberID")
     private Member member;
     @ManyToOne
     @JoinColumn(name = "competition_id")
+    @MapsId("competitionID")
     private Competition competition;
 
 }

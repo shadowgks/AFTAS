@@ -41,7 +41,7 @@ public class FishSeeder {
         this.log();
         if(fishRepository.findAll().isEmpty())
             Arrays.stream(fishes).forEach(fish -> {
-                Optional<Level> optionalLevel = levelRepository.getLevelByCode(fish.getLevel().getCode());
+                Optional<Level> optionalLevel = levelRepository.findLevelByCode(fish.getLevel().getCode());
                 if(optionalLevel.isPresent()){
                     fish.setLevel(optionalLevel.get());
                     fishRepository.save(fish);

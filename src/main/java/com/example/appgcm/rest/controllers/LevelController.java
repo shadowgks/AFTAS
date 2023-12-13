@@ -1,18 +1,15 @@
 package com.example.appgcm.rest.controllers;
 
-import com.example.appgcm.dtos.FishDto;
 import com.example.appgcm.dtos.LevelDto;
-import com.example.appgcm.mapper.FishMapper;
 import com.example.appgcm.mapper.LevelMapper;
-import com.example.appgcm.models.entity.Fish;
 import com.example.appgcm.models.entity.Level;
 import com.example.appgcm.services.LevelService;
 import com.example.appgcm.utils.Response;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,5 +27,14 @@ public class LevelController {
                 .map(LevelMapper::mapToDto)
                 .toList());
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<Response<LevelDto>> saveLevel(@Valid @RequestBody LevelDto levelDto){
+        Response<LevelDto> response = new Response<>();
+        Level level = levelService.saveLevel(levelDto);
+        response.setResult(LevelMapper.mapToDto(level));
+        response.setMessage("Created Level Successfully");
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

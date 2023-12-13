@@ -14,9 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Level {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private Integer code;
     private String description;
     @Column(nullable = false, unique = true)

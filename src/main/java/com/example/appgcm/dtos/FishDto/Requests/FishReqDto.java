@@ -1,4 +1,4 @@
-package com.example.appgcm.dtos;
+package com.example.appgcm.dtos.FishDto.Requests;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
@@ -7,8 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 @Builder
-public record FishDto(
-        Long id,
+public record FishReqDto(
         @NotNull(message = "Fish name cannot be null")
         @NotBlank(message = "Fish name cannot be blank")
         String name,

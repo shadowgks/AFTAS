@@ -5,7 +5,6 @@ import lombok.Builder;
 
 @Builder
 public record LevelDto(
-        Long id,
         @NotNull(message = "Code is required")
         Integer code,
         @NotNull(message = "Description is required")
