@@ -1,6 +1,6 @@
 package com.example.appgcm.mapper;
 
-import com.example.appgcm.dtos.CompetitionDto;
+import com.example.appgcm.dtos.CompetitionDto.CompetitionDto;
 import com.example.appgcm.models.entity.Competition;
 
 public class CompetitionMapper {
@@ -14,6 +14,7 @@ public class CompetitionMapper {
                 .endTime(competition.getEndTime())
                 .location(competition.getLocation())
                 .numberOfParticipants(competition.getNumberOfParticipants())
+                .rankingList(competition.getRankingList())
                 .build();
     }
 

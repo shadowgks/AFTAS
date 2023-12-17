@@ -7,7 +7,6 @@ import lombok.Builder;
 
 @Builder
 public record HuntingResDto(
-        Long id,
         Integer number_of_fish,
         Competition competition,
         Fish fish,

@@ -3,8 +3,8 @@ package com.example.appgcm.utils;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
 
-import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -12,6 +12,6 @@ import java.util.Map;
 public class Response<T>{
     private String message;
     private T result;
-    private Map<String, String> errors;
+    private Map<String, String> errorsValidation;
     private String error;
 }

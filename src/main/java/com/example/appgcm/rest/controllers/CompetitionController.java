@@ -1,6 +1,6 @@
 package com.example.appgcm.rest.controllers;
 
-import com.example.appgcm.dtos.CompetitionDto;
+import com.example.appgcm.dtos.CompetitionDto.CompetitionDto;
 import com.example.appgcm.dtos.RankingDto.Response.RankingResDto;
 import com.example.appgcm.dtos.RegisterMemberOnCompetitionDto;
 import com.example.appgcm.mapper.CompetitionMapper;
@@ -11,12 +11,15 @@ import com.example.appgcm.services.CompetitionService;
 import com.example.appgcm.utils.Response;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/competition")
@@ -44,13 +47,17 @@ public class CompetitionController {
     }
 
     @GetMapping
-    public ResponseEntity<Response<List<CompetitionDto>>> getAllCompetition(){
-        Response<List<CompetitionDto>> listResponse = new Response<>();
-        List<Competition> competitionList = competitionService.findAllCompetition();
-        listResponse.setResult(competitionList
-                .stream()
-                .map(CompetitionMapper::mapToDto)
-                .toList());
+    public ResponseEntity<Response<Map<String ,Page<Competition>>>> getAllCompetition(@RequestParam Optional<String> location,
+                                                                            @RequestParam Optional<Integer> numPage,
+                                                                            @RequestParam Optional<Integer> size){
+        Response<Map<String, Page<Competition>>> listResponse = new Response<>();
+        Map<String, Page<Competition>> stringListMap = new HashMap<>();
+        Page<Competition> competitionList = competitionService.findAllCompetition(
+                location.orElse(""),
+                numPage.orElse(0),
+                size.orElse(10));
+        stringListMap.put("page", competitionList);
+        listResponse.setResult(stringListMap);
         return ResponseEntity.ok(listResponse);
     }
 

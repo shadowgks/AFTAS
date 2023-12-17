@@ -12,7 +12,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MemberCompetition {
+public class MemberCompetition implements Serializable {
     @Column(name = "member_id")
     private Long memberID;
     @Column(name = "competition_id")

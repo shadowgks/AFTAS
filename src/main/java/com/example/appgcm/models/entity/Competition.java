@@ -1,11 +1,9 @@
 package com.example.appgcm.models.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -14,7 +12,8 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Builder
 public class Competition {
     @Id
@@ -30,5 +29,6 @@ public class Competition {
     private String location;
     private Double amount;
     @OneToMany(mappedBy = "competition")
-    private List<Ranking> members;
+    @JsonBackReference
+    private List<Ranking> rankingList;
 }

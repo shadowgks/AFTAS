@@ -1,11 +1,9 @@
 package com.example.appgcm.models.entity;
 
 import com.example.appgcm.models.enums.IdentityDocumentType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.Type;
 
@@ -16,7 +14,8 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Builder
 public class Member {
     @Id
@@ -31,5 +30,6 @@ public class Member {
     @Column(unique = true)
     private String identityNumber;
     @OneToMany(mappedBy = "member")
-    private List<Ranking> competitions;
+    @JsonBackReference
+    private List<Ranking> rankingList;
 }

@@ -24,7 +24,7 @@ public class HuntingController {
     @PostMapping("/hunt")
     public ResponseEntity<Response<HuntingResDto>> createHunting(@Valid @RequestBody HuntingReqDto reqDto){
         Response<HuntingResDto> response = new Response<>();
-        Hunting hunting = huntingService.huntingFish(reqDto);
+        Hunting hunting = huntingService.sumHuntingFish(reqDto);
         response.setMessage("Hunting successfully");
         response.setResult(HuntingMapper.mapToDto(hunting));
         return new ResponseEntity<>(response, HttpStatus.CREATED);

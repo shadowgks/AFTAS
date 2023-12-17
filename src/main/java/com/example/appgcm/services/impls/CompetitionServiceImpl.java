@@ -1,7 +1,6 @@
 package com.example.appgcm.services.impls;
 
-import com.example.appgcm.dtos.CompetitionDto;
-import com.example.appgcm.dtos.HuntingDto.Requests.HuntingReqDto;
+import com.example.appgcm.dtos.CompetitionDto.CompetitionDto;
 import com.example.appgcm.dtos.RegisterMemberOnCompetitionDto;
 import com.example.appgcm.models.entity.Competition;
 import com.example.appgcm.models.entity.Member;
@@ -10,11 +9,13 @@ import com.example.appgcm.models.entity.embedded.MemberCompetition;
 import com.example.appgcm.repositories.*;
 import com.example.appgcm.services.CompetitionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -25,13 +26,14 @@ public class CompetitionServiceImpl implements CompetitionService {
     private final RankingRepository rankingRepository;
 
     @Override
-    public List<Competition> findAllCompetition() {
-        List<Competition> competitionList = competitionRepository.findAll();
+    public Page<Competition> findAllCompetition(String location, Integer numPage, Integer size) {
+       Page<Competition> competitionList = competitionRepository.findByLocationContaining(location, PageRequest.of(numPage, size));
         if (competitionList.isEmpty()) {
             throw new IllegalArgumentException("Not Found Any Competition");
         }
         return competitionList;
     }
+
 
     @Override
     public Competition findByDateCompetition(LocalDate date) {
@@ -61,6 +63,7 @@ public class CompetitionServiceImpl implements CompetitionService {
         if(reqDto.endTime().isBefore(reqDto.startTime())){
             throw new IllegalArgumentException("Check start time and end time");
         }
+
 
         //Builder Competition
         Competition competition = Competition.builder()
@@ -111,10 +114,18 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     @Override
     public Ranking registerMember(RegisterMemberOnCompetitionDto reqDto) {
+        // Check Competition and member if exists
         Optional<Competition> competition = Optional.ofNullable(competitionRepository.findById(reqDto.competition_id())
                 .orElseThrow(() -> new IllegalArgumentException("Sorry this competition not exists!")));
         Optional<Member> member = Optional.ofNullable(memberRepository.findById(reqDto.member_id())
                 .orElseThrow(() -> new IllegalArgumentException("Sorry this member not exists!")));
+
+        // Check number participant
+        Integer numP = competition.get().getNumberOfParticipants();
+        Integer countAllByCompetition = rankingRepository.countByCompetition(competition.get());
+        if (countAllByCompetition >= numP){
+            throw new IllegalArgumentException("Competition It has arrived maximum number of members: "+ numP);
+        }
 
         // Check if member already registered on competition
         Optional<Ranking> ranking = rankingRepository.findByMemberAndCompetition(member.get(), competition.get());
@@ -123,19 +134,31 @@ public class CompetitionServiceImpl implements CompetitionService {
         }
 
         // Check date registered before 24h in competition
-        //...
+        if (checkRegisterBefore24(competition.get())){
+            // Now create ranking
+            Ranking ranking1 = Ranking.builder()
+                    .id(MemberCompetition.builder()
+                            .competitionID(member.get().getId())
+                            .memberID(competition.get().getId())
+                            .build())
+                    .member(member.get())
+                    .competition(competition.get())
+                    .rankk(0)
+                    .score(0)
+                    .build();
+            return rankingRepository.save(ranking1);
+        }else{
+            throw new IllegalArgumentException("The time has passed to register on this competition");
+        }
 
-        // Now create ranking
-        Ranking ranking1 = Ranking.builder()
-                .id(MemberCompetition.builder()
-                        .competitionID(member.get().getId())
-                        .memberID(competition.get().getId())
-                        .build())
-                .member(member.get())
-                .competition(competition.get())
-                .rankk(0)
-                .score(0)
-                .build();
-        return rankingRepository.save(ranking1);
+    }
+
+
+    public boolean checkRegisterBefore24(Competition competition){
+        if(competition.getDate().isEqual(LocalDate.now())){
+            LocalTime timeStartCompetition = competition.getStartTime().minusHours(24);
+            return LocalTime.now().isBefore(timeStartCompetition);
+        }
+        return true;
     }
 }

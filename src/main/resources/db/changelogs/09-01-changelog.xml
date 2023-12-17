@@ -5,7 +5,7 @@
                                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd"
         objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-    <changeSet id="1702467300074-1"
+    <changeSet id="1702545578009-1"
                author="momos (generated)">
         <createTable tableName="competition">
             <column autoIncrement="true"
@@ -31,7 +31,7 @@
                     type="DOUBLE"/>
         </createTable>
     </changeSet>
-    <changeSet id="1702467300074-2"
+    <changeSet id="1702545578009-2"
                author="momos (generated)">
         <createTable tableName="fish">
             <column autoIncrement="true"
@@ -51,7 +51,7 @@
                     type="INT"/>
         </createTable>
     </changeSet>
-    <changeSet id="1702467300074-3"
+    <changeSet id="1702545578009-3"
                author="momos (generated)">
         <createTable tableName="hunting">
             <column autoIncrement="true"
@@ -71,7 +71,7 @@
                     type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet id="1702467300074-4"
+    <changeSet id="1702545578009-4"
                author="momos (generated)">
         <createTable tableName="level">
             <column name="code"
@@ -88,7 +88,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet id="1702467300074-5"
+    <changeSet id="1702545578009-5"
                author="momos (generated)">
         <createTable tableName="member">
             <column autoIncrement="true"
@@ -114,11 +114,11 @@
                     type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
-    <changeSet id="1702467300074-6"
+    <changeSet id="1702545578009-6"
                author="momos (generated)">
         <createTable tableName="ranking">
             <column name="score"
-                    type="INT"/>
+                    type="DOUBLE"/>
             <column name="rankk"
                     type="INT"/>
             <column name="member_id"
@@ -135,37 +135,37 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet id="1702467300074-7"
+    <changeSet id="1702545578009-7"
                author="momos (generated)">
         <addUniqueConstraint columnNames="code"
                              constraintName="uc_competition_code"
                              tableName="competition"/>
     </changeSet>
-    <changeSet id="1702467300074-8"
+    <changeSet id="1702545578009-8"
                author="momos (generated)">
         <addUniqueConstraint columnNames="date"
                              constraintName="uc_competition_date"
                              tableName="competition"/>
     </changeSet>
-    <changeSet id="1702467300074-9"
+    <changeSet id="1702545578009-9"
                author="momos (generated)">
         <addUniqueConstraint columnNames="name"
                              constraintName="uc_fish_name"
                              tableName="fish"/>
     </changeSet>
-    <changeSet id="1702467300074-10"
+    <changeSet id="1702545578009-10"
                author="momos (generated)">
         <addUniqueConstraint columnNames="points"
                              constraintName="uc_level_points"
                              tableName="level"/>
     </changeSet>
-    <changeSet id="1702467300074-11"
+    <changeSet id="1702545578009-11"
                author="momos (generated)">
         <addUniqueConstraint columnNames="identity_number"
                              constraintName="uc_member_identitynumber"
                              tableName="member"/>
     </changeSet>
-    <changeSet id="1702467300074-12"
+    <changeSet id="1702545578009-12"
                author="momos (generated)">
         <addForeignKeyConstraint baseColumnNames="level_code"
                                  baseTableName="fish"
@@ -173,7 +173,7 @@
                                  referencedColumnNames="code"
                                  referencedTableName="level"/>
     </changeSet>
-    <changeSet id="1702467300074-13"
+    <changeSet id="1702545578009-13"
                author="momos (generated)">
         <addForeignKeyConstraint baseColumnNames="competition_id"
                                  baseTableName="hunting"
@@ -181,7 +181,7 @@
                                  referencedColumnNames="id"
                                  referencedTableName="competition"/>
     </changeSet>
-    <changeSet id="1702467300074-14"
+    <changeSet id="1702545578009-14"
                author="momos (generated)">
         <addForeignKeyConstraint baseColumnNames="fish_id"
                                  baseTableName="hunting"
@@ -189,7 +189,7 @@
                                  referencedColumnNames="id"
                                  referencedTableName="fish"/>
     </changeSet>
-    <changeSet id="1702467300074-15"
+    <changeSet id="1702545578009-15"
                author="momos (generated)">
         <addForeignKeyConstraint baseColumnNames="member_id"
                                  baseTableName="hunting"
@@ -197,7 +197,7 @@
                                  referencedColumnNames="id"
                                  referencedTableName="member"/>
     </changeSet>
-    <changeSet id="1702467300074-16"
+    <changeSet id="1702545578009-16"
                author="momos (generated)">
         <addForeignKeyConstraint baseColumnNames="competition_id"
                                  baseTableName="ranking"
@@ -205,7 +205,7 @@
                                  referencedColumnNames="id"
                                  referencedTableName="competition"/>
     </changeSet>
-    <changeSet id="1702467300074-17"
+    <changeSet id="1702545578009-17"
                author="momos (generated)">
         <addForeignKeyConstraint baseColumnNames="member_id"
                                  baseTableName="ranking"
