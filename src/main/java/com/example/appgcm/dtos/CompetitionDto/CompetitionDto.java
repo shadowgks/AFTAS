@@ -21,10 +21,11 @@ public record CompetitionDto(
         LocalTime endTime,
         @NotNull(message = "Number of participants cannot be null")
         @Positive(message = "Number of participants must be positive")
+        @Min(value = 1)
         Integer numberOfParticipants,
         @NotNull(message = "Location cannot be null")
         @NotBlank(message = "Location cannot be blank")
-        @Min(value = 3, message = "Name location must be greater than or equal to 3")
+//        @Min(value = 3, message = "Name location must be greater than or equal to 3")
         String location,
         @NotNull(message = "Amount cannot be null")
         @PositiveOrZero(message = "Amount must be positive")

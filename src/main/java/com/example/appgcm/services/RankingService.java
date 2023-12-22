@@ -9,4 +9,5 @@ import java.util.Map;
 
 public interface RankingService {
     List<Ranking> RankingListCompetition(String codeCompetition);
+    public List<Ranking> calculRanking(String codeCompetition);
 }

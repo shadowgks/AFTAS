@@ -7,9 +7,11 @@ import com.example.appgcm.models.entity.Ranking;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface CompetitionService {
-    Page<Competition> findAllCompetition(String location, Integer numPage, Integer size);
+    Page<Competition> findAllCompetitionPageble(String location, Integer numPage, Integer size);
+    List<Competition> findAllCompetition();
     Competition findByDateCompetition(LocalDate date);
     Competition findByCodeCompetition(String code);
     Competition saveCompetition(CompetitionDto competition);

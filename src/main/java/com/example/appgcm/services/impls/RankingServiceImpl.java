@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,21 +20,23 @@ public class RankingServiceImpl implements RankingService {
     private final CompetitionRepository competitionRepository;
     @Override
     public List<Ranking> RankingListCompetition(String codeCompetition) {
+       return rankingRepository.saveAll(calculRanking(codeCompetition));
+    }
+
+    @Override
+    public List<Ranking> calculRanking(String codeCompetition){
         Optional<Competition> competition1 = Optional.of(competitionRepository.findByCode(codeCompetition))
                 .orElseThrow(() -> new IllegalArgumentException("Not found this Competition!"));
-
 
         // Get ranking competition by order Desc
         List<Ranking> rankingList = rankingRepository.findAllByCompetitionOrderByScoreDesc(competition1.get());
 
         // update rank member
         AtomicReference<Integer> index = new AtomicReference<>(1);
-        rankingList.stream()
-                .forEach(rc -> {
-                    Ranking ranking = rc;
-                    ranking.setRankk(index.getAndSet(index.get() + 1));
-                    rankingRepository.save(ranking);
-                });
-        return rankingList;
+        return rankingList.stream()
+                .map(rc -> {
+                    rc.setRankk(index.getAndSet(index.get() + 1));
+                    return rc;
+                }).collect(Collectors.toList());
     }
 }

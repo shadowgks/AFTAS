@@ -7,7 +7,6 @@ public class MemberMapper {
     public static MemberDto mapToDto(Member member){
         return MemberDto.builder()
                 .id(member.getId())
-                .num(member.getNum())
                 .firstName(member.getFirstName())
                 .lastName(member.getLastName())
                 .accessionDate(member.getAccessionDate())

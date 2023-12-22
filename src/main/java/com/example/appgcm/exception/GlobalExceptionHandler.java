@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
         Response<?> response = new Response<>();
         String getErrorMessage = ex.getMessage();
         response.setError(getErrorMessage);
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().body(response);
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
@@ -36,6 +36,6 @@ public class GlobalExceptionHandler {
                 }
         );
         response.setErrorsValidation(errors);
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().body(response);
     }
 }

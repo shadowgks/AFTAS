@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
 
@@ -24,30 +25,27 @@ public class HuntingServiceImpl implements HuntingService {
     @Override
     public Hunting sumHuntingFish(HuntingReqDto huntingDto) {
         // Check if exists
-        Optional<Fish> fish = Optional.ofNullable(fishRepository.findByName(huntingDto.fish().name())
+        Optional<Fish> fish = Optional.ofNullable(fishRepository.findByName(huntingDto.fishName())
                 .orElseThrow(() -> new IllegalArgumentException("Sorry this fish not exists!")));
-        Optional<Competition> competition = Optional.ofNullable(competitionRepository.findById(huntingDto.competitionId())
+        Optional<Competition> competition = Optional.ofNullable(competitionRepository.findByCode(huntingDto.competitionCode())
                 .orElseThrow(() -> new IllegalArgumentException("Sorry this competition not exists!")));
-        Optional<Member> member = Optional.ofNullable(memberRepository.findById(huntingDto.memberId())
+        Optional<Member> member = Optional.ofNullable(memberRepository.findByIdentityNumber(huntingDto.memberIdentity())
                 .orElseThrow(() -> new IllegalArgumentException("Sorry this member not exists!")));
         Optional<Ranking> getMemberAndCompetition = Optional.ofNullable(rankingRepository.findByMemberAndCompetition(member.get(), competition.get())
                 .orElseThrow(() -> new IllegalArgumentException("Sorry this member does not register yet in the competition!")));
 
         // Check average weight
-        if (huntingDto.fish().weight() > fish.get().getAverageWeight()){
+        if (huntingDto.weight() < fish.get().getAverageWeight()){
             throw new IllegalArgumentException("The weight of the hunted fish exceeds the average weight!");
         }
 
         // Check date for hunting
         if(competition.get().getDate().isBefore(LocalDate.now())){
-            throw new IllegalArgumentException("This competition as already done");
+            throw new IllegalArgumentException("You can not hunting in this competition because date of competition is expired");
         }
 
         // Check date for hunting
-//        if(competition.get().getStartTime().isBefore(LocalTime.now()) && competition.get().getEndTime().isBefore(LocalTime.now()) ){
-//            throw new IllegalArgumentException("This competition as already done");
-//        }
-
+        checkDate(competition.get());
 
         // Check CompetitionAndMemberAndFish if exists | Update Hunting
         Integer scoreMemberInRanking = getMemberAndCompetition.get().getScore();
@@ -63,21 +61,18 @@ public class HuntingServiceImpl implements HuntingService {
                     .member(huntingData.getMember())
                     .build();
 
-            //
             // Create Score Member in ranking
-            Integer getNumberFishMemberOnHunting = findByCompetitionAndMemberAndFish.get().getNumberOfFish();
-            Integer sumScoreOfMember = getNumberFishMemberOnHunting * getPointFish;
+            Integer getNumberFishMemberOnHunting = huntingData.getNumberOfFish();
             Ranking ranking1 = Ranking.builder()
                     .id(MemberCompetition.builder()
                             .memberID(member.get().getId())
                             .competitionID(competition.get().getId())
                             .build())
-                    .score(sumScoreOfMember + scoreMemberInRanking)
+                    .score(getPointFish + scoreMemberInRanking)
                     .competition(competition.get())
                     .member(member.get())
                     .build();
             rankingRepository.save(ranking1);
-
             return huntingRepository.save(updateHunting);
         }
 
@@ -101,5 +96,15 @@ public class HuntingServiceImpl implements HuntingService {
                 .build();
         rankingRepository.save(ranking1);
         return huntingRepository.save(createHunting);
+    }
+
+
+    public void checkDate(Competition competition){
+        LocalDateTime dateNow = LocalDateTime.now();
+        LocalDateTime dateCompetition = LocalDateTime.of(competition.getDate(), competition.getStartTime());
+
+        if(dateNow.isBefore(dateCompetition)){
+            throw new IllegalArgumentException("This competition doesn't started yet!");
+        }
     }
 }

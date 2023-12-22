@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -47,18 +48,28 @@ public class CompetitionController {
     }
 
     @GetMapping
-    public ResponseEntity<Response<Map<String ,Page<Competition>>>> getAllCompetition(@RequestParam Optional<String> location,
+    public ResponseEntity<Response<Map<String ,Page<Competition>>>> getAllCompetitionPageble(@RequestParam Optional<String> location,
                                                                             @RequestParam Optional<Integer> numPage,
                                                                             @RequestParam Optional<Integer> size){
         Response<Map<String, Page<Competition>>> listResponse = new Response<>();
         Map<String, Page<Competition>> stringListMap = new HashMap<>();
-        Page<Competition> competitionList = competitionService.findAllCompetition(
+        Page<Competition> competitionList = competitionService.findAllCompetitionPageble(
                 location.orElse(""),
                 numPage.orElse(0),
-                size.orElse(10));
+                size.orElse(200));
         stringListMap.put("page", competitionList);
         listResponse.setResult(stringListMap);
         return ResponseEntity.ok(listResponse);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<Response<List<CompetitionDto>>> getAllCompetition(){
+        Response<List<CompetitionDto>> responseList = new Response<>();
+        List<Competition> competitionList = competitionService.findAllCompetition();
+        responseList.setResult(competitionList
+                .stream().map(CompetitionMapper::mapToDto)
+                .toList());
+        return ResponseEntity.ok(responseList);
     }
 
     @GetMapping("/find-by-code/{code}")
@@ -93,4 +104,11 @@ public class CompetitionController {
         response.setMessage("Deleted Competition Successfully");
         return ResponseEntity.ok(response);
     }
+
+//    @GetMapping("/filter")
+//    public ResponseEntity<Response<CompetitionDto>> filterCompetition(){
+//        Response<CompetitionDto> response = new Response<>();
+//
+//        return ResponseEntity.ok(response);
+//    }
 }

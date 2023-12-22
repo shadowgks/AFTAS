@@ -21,7 +21,6 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer num;
     private String firstName;
     private String lastName;
     private LocalDate accessionDate;

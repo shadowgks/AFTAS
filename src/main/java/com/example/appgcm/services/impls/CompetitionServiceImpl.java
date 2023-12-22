@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -26,14 +27,22 @@ public class CompetitionServiceImpl implements CompetitionService {
     private final RankingRepository rankingRepository;
 
     @Override
-    public Page<Competition> findAllCompetition(String location, Integer numPage, Integer size) {
+    public Page<Competition> findAllCompetitionPageble(String location, Integer numPage, Integer size) {
        Page<Competition> competitionList = competitionRepository.findByLocationContaining(location, PageRequest.of(numPage, size));
         if (competitionList.isEmpty()) {
-            throw new IllegalArgumentException("Not Found Any Competition");
+            throw new IllegalArgumentException("Not Found Any Competitions");
         }
         return competitionList;
     }
 
+    @Override
+    public List<Competition> findAllCompetition() {
+        List<Competition> competitionList = competitionRepository.findAll();
+        if(competitionList.isEmpty()){
+            throw new IllegalArgumentException("Not Found list Any Competitions");
+        }
+        return competitionList;
+    }
 
     @Override
     public Competition findByDateCompetition(LocalDate date) {
@@ -51,6 +60,12 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     @Override
     public Competition saveCompetition(CompetitionDto reqDto) {
+        // Check date competition
+        Optional<Competition> optionalCompetition = competitionRepository.findByDate(reqDto.date());
+        if(optionalCompetition.isPresent()){
+            throw new IllegalArgumentException("Date deja exist");
+        }
+
         // Substring location
         String locationSplit = reqDto.location().substring(0,3).toLowerCase();
 
@@ -61,9 +76,8 @@ public class CompetitionServiceImpl implements CompetitionService {
 
         // Check Time
         if(reqDto.endTime().isBefore(reqDto.startTime())){
-            throw new IllegalArgumentException("Check start time and end time");
+            throw new IllegalArgumentException("You must check start time and end time");
         }
-
 
         //Builder Competition
         Competition competition = Competition.builder()
@@ -115,9 +129,9 @@ public class CompetitionServiceImpl implements CompetitionService {
     @Override
     public Ranking registerMember(RegisterMemberOnCompetitionDto reqDto) {
         // Check Competition and member if exists
-        Optional<Competition> competition = Optional.ofNullable(competitionRepository.findById(reqDto.competition_id())
+        Optional<Competition> competition = Optional.ofNullable(competitionRepository.findByCode(reqDto.competitionCode())
                 .orElseThrow(() -> new IllegalArgumentException("Sorry this competition not exists!")));
-        Optional<Member> member = Optional.ofNullable(memberRepository.findById(reqDto.member_id())
+        Optional<Member> member = Optional.ofNullable(memberRepository.findByIdentityNumber(reqDto.memberIdentity())
                 .orElseThrow(() -> new IllegalArgumentException("Sorry this member not exists!")));
 
         // Check number participant
@@ -125,6 +139,10 @@ public class CompetitionServiceImpl implements CompetitionService {
         Integer countAllByCompetition = rankingRepository.countByCompetition(competition.get());
         if (countAllByCompetition >= numP){
             throw new IllegalArgumentException("Competition It has arrived maximum number of members: "+ numP);
+        }
+
+        if(competition.get().getDate().isBefore(LocalDate.now())){
+            throw new IllegalArgumentException("You can not registered in this competition because date of competition is expired");
         }
 
         // Check if member already registered on competition
@@ -152,7 +170,6 @@ public class CompetitionServiceImpl implements CompetitionService {
         }
 
     }
-
 
     public boolean checkRegisterBefore24(Competition competition){
         if(competition.getDate().isEqual(LocalDate.now())){

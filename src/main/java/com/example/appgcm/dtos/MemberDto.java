@@ -9,8 +9,6 @@ import java.time.LocalDate;
 @Builder
 public record MemberDto(
         Long id,
-        @NotNull(message = "Please provide a valid number")
-        Integer num,
         @NotNull(message = "First name is required")
         @NotBlank(message = "First name cannot be blank")
         String firstName,

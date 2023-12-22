@@ -8,7 +8,10 @@ import com.example.appgcm.services.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +30,15 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public List<Member> searchMembers(String searchTerm) {
+        List<Member> memberList = memberRepository.searchMembers(searchTerm);
+        if (memberList.isEmpty()) {
+            throw new IllegalArgumentException("Not Found Any Member");
+        }
+        return memberList;
+    }
+
+    @Override
     public Member findMemberById(Long id) {
         Optional<Member> member = Optional.ofNullable(memberRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Not found Member " + id)));
@@ -35,8 +47,14 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member saveMember(MemberDto member) {
+        // Check member
+        Optional<Member> memberOptional = memberRepository.findByIdentityNumber(member.identityNumber());
+        if(memberOptional.isPresent()){
+            throw new IllegalArgumentException("Member deja exist!");
+        }
+
+        // Add member
         Member member1 = Member.builder()
-                .num(member.num())
                 .firstName(member.firstName())
                 .lastName(member.lastName())
                 .accessionDate(LocalDate.now())

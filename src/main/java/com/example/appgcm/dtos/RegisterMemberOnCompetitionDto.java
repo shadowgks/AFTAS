@@ -4,8 +4,8 @@ import jakarta.validation.constraints.NotNull;
 
 public record RegisterMemberOnCompetitionDto(
         @NotNull(message = "Member cannot be null")
-        Long member_id,
+        String memberIdentity,
         @NotNull(message = "Competition cannot be null")
-        Long competition_id
+        String competitionCode
 ) {
 }

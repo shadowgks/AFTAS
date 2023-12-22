@@ -3,6 +3,8 @@ package com.example.appgcm.mapper;
 import com.example.appgcm.dtos.CompetitionDto.CompetitionDto;
 import com.example.appgcm.models.entity.Competition;
 
+import java.time.LocalDate;
+
 public class CompetitionMapper {
     public static CompetitionDto mapToDto(Competition competition){
         return CompetitionDto.builder()

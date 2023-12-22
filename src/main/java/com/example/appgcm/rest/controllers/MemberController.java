@@ -48,4 +48,15 @@ public class MemberController {
                 .toList());
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/search/{searchTerm}")
+    public ResponseEntity<Response<List<MemberDto>>> findAllMembersBySearch(@PathVariable("searchTerm") String searchTerm){
+        Response<List<MemberDto>> listResponse = new Response<>();
+        List<Member> memberList = memberService.searchMembers(searchTerm);
+        listResponse.setResult(memberList
+                .stream()
+                .map(MemberMapper::mapToDto)
+                .toList());
+        return ResponseEntity.ok(listResponse);
+    }
 }
