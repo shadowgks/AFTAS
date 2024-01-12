@@ -7,6 +7,11 @@
 
     <changeSet id="1702545578009-1"
                author="momos (generated)">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="competition"/>
+            </not>
+        </preConditions>
         <createTable tableName="competition">
             <column autoIncrement="true"
                     name="id"
@@ -33,6 +38,11 @@
     </changeSet>
     <changeSet id="1702545578009-2"
                author="momos (generated)">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="fish"/>
+            </not>
+        </preConditions>
         <createTable tableName="fish">
             <column autoIncrement="true"
                     name="id"
@@ -53,6 +63,11 @@
     </changeSet>
     <changeSet id="1702545578009-3"
                author="momos (generated)">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="hunting"/>
+            </not>
+        </preConditions>
         <createTable tableName="hunting">
             <column autoIncrement="true"
                     name="id"
@@ -73,6 +88,11 @@
     </changeSet>
     <changeSet id="1702545578009-4"
                author="momos (generated)">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="level"/>
+            </not>
+        </preConditions>
         <createTable tableName="level">
             <column name="code"
                     type="INT">
@@ -90,6 +110,11 @@
     </changeSet>
     <changeSet id="1702545578009-5"
                author="momos (generated)">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="member"/>
+            </not>
+        </preConditions>
         <createTable tableName="member">
             <column autoIncrement="true"
                     name="id"
@@ -116,6 +141,11 @@
     </changeSet>
     <changeSet id="1702545578009-6"
                author="momos (generated)">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="ranking"/>
+            </not>
+        </preConditions>
         <createTable tableName="ranking">
             <column name="score"
                     type="DOUBLE"/>
@@ -137,30 +167,55 @@
     </changeSet>
     <changeSet id="1702545578009-7"
                author="momos (generated)">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <uniqueConstraintExists constraintName="uc_competition_code" tableName="competition"/>
+            </not>
+        </preConditions>
         <addUniqueConstraint columnNames="code"
                              constraintName="uc_competition_code"
                              tableName="competition"/>
     </changeSet>
     <changeSet id="1702545578009-8"
                author="momos (generated)">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <uniqueConstraintExists constraintName="uc_competition_date" tableName="competition"/>
+            </not>
+        </preConditions>
         <addUniqueConstraint columnNames="date"
                              constraintName="uc_competition_date"
                              tableName="competition"/>
     </changeSet>
     <changeSet id="1702545578009-9"
                author="momos (generated)">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <uniqueConstraintExists constraintName="uc_fish_name" tableName="fish"/>
+            </not>
+        </preConditions>
         <addUniqueConstraint columnNames="name"
                              constraintName="uc_fish_name"
                              tableName="fish"/>
     </changeSet>
     <changeSet id="1702545578009-10"
                author="momos (generated)">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <uniqueConstraintExists constraintName="uc_level_points" tableName="level"/>
+            </not>
+        </preConditions>
         <addUniqueConstraint columnNames="points"
                              constraintName="uc_level_points"
                              tableName="level"/>
     </changeSet>
     <changeSet id="1702545578009-11"
                author="momos (generated)">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <uniqueConstraintExists constraintName="uc_member_identitynumber" tableName="member"/>
+            </not>
+        </preConditions>
         <addUniqueConstraint columnNames="identity_number"
                              constraintName="uc_member_identitynumber"
                              tableName="member"/>

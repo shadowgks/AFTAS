@@ -63,6 +63,29 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <!-- Development Profile -->
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+                <spring.profiles.active>dev</spring.profiles.active>
+            </properties>
+        </profile>
+
+        <!-- Production Profile -->
+        <profile>
+            <id>prod</id>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+                <spring.profiles.active>prod</spring.profiles.active>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
@@ -75,35 +98,46 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <environmentVariables>
+                        <SPRING_PROFILES_ACTIVE>
+                            ${spring.profiles.active}
+                        </SPRING_PROFILES_ACTIVE>
+                    </environmentVariables>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.liquibase</groupId>
-                <artifactId>liquibase-maven-plugin</artifactId>
-                <version> 3.10.0</version>
-                <configuration>
-                    <propertyFile>src/main/resources/liquibase.properties</propertyFile>
-                    <diffChangeLogFile>${project.basedir}/src/main/resources/db/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.liquibase.ext</groupId>
-                        <artifactId>liquibase-hibernate4</artifactId>
-                        <version>3.5</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-beans</artifactId>
-                        <version>4.1.7.RELEASE</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.springframework.data</groupId>
-                        <artifactId>spring-data-jpa</artifactId>
-                        <version>1.7.3.RELEASE</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.liquibase</groupId>-->
+<!--                <artifactId>liquibase-maven-plugin</artifactId>-->
+<!--                <version>3.10.0</version>-->
+<!--                <configuration>-->
+<!--                    <propertyFile>src/main/resources/application-dev.yaml</propertyFile>-->
+<!--                    <diffChangeLogFile>${project.basedir}/src/main/resources/db/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>-->
+<!--                </configuration>-->
+<!--                <dependencies>-->
+<!--                    <dependency>-->
+<!--                        <groupId>org.liquibase.ext</groupId>-->
+<!--                        <artifactId>liquibase-hibernate4</artifactId>-->
+<!--                        <version>3.5</version>-->
+<!--                    </dependency>-->
+<!--                    <dependency>-->
+<!--                        <groupId>org.springframework</groupId>-->
+<!--                        <artifactId>spring-beans</artifactId>-->
+<!--                        <version>4.1.7.RELEASE</version>-->
+<!--                    </dependency>-->
+<!--                    <dependency>-->
+<!--                        <groupId>org.springframework.data</groupId>-->
+<!--                        <artifactId>spring-data-jpa</artifactId>-->
+<!--                        <version>1.7.3.RELEASE</version>-->
+<!--                    </dependency>-->
+<!--                </dependencies>-->
+<!--            </plugin>-->
         </plugins>
+        <resources>
+            <!-- classPath master changelog liquibase-->
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
     </build>
 
 </project>
