@@ -5,29 +5,25 @@ services:
     container_name: mysqldb
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: aftas
-      MYSQL_USER: root
-      MYSQL_PASSWORD:
+      MYSQL_DATABASE: appgcm
     ports:
       - "3306:3306"
   aftasbackend:
     image: aftasbackend:v1
     container_name: aftasbackend
     restart: on-failure
-    build:
-      context: .
-      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     environment:
-      - SPRING_PROFILES_ACTIVE=prod
+        SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/appgcm?createDatabaseIfNotExist=true
+        SPRING_DATASOURCE_USERNAME: root
+        SPRING_DATASOURCE_PASSWORD: ""
     depends_on:
       - mysql
-#  aftasfrontend:
-#    image: karimelaoumari/aftasfront:v1
-#    container_name: aftasfront
-#    ports:
-#      - "4200:80"
-#    depends_on:
-#      - aftasbackendversion: '3'
+  aftasfrontend:
+    image: aftasfront:v1
+    container_name: aftasfront
+    ports:
+      - "4200:80"
+    depends_on:
+      - aftasbackend
