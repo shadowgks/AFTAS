@@ -5,15 +5,18 @@ import com.example.appgcm.models.entity.Fish;
 import com.example.appgcm.models.entity.Level;
 import com.example.appgcm.repositories.FishRepository;
 import com.example.appgcm.repositories.LevelRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class FishSeeder {
     private final FishRepository fishRepository;
     private final LevelRepository levelRepository;
+
     private final Fish[] fishes = {
         Fish.builder().name("Tuna").averageWeight(5.0).level(Level.builder().code(9).build()).build(),
         Fish.builder().name("Salmon").averageWeight(2.0).level(Level.builder().code(2).build()).build(),
@@ -30,13 +33,10 @@ public class FishSeeder {
         Fish.builder().name("Mahi-Mahi").averageWeight(7.0).level(Level.builder().code(6).build()).build()
     };
 
-    public FishSeeder(FishRepository fishRepository, LevelRepository levelRepository) {
-        this.fishRepository = fishRepository;
-        this.levelRepository = levelRepository;
-    }
     private void log(){
         System.out.println("----------------------Fish Seeder----------------------");
     }
+
     public void seed() {
         this.log();
         if(fishRepository.findAll().isEmpty())
