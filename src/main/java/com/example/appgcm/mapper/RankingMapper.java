@@ -11,7 +11,7 @@ public class RankingMapper {
                 .rank(ranking.getRankk())
                 .score(ranking.getScore())
                 .competition(ranking.getCompetition())
-                .member(ranking.getMember())
+                .user(ranking.getUser())
                 .build();
     }
 }

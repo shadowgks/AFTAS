@@ -1,12 +1,14 @@
 package com.example.appgcm.services.impls;
 
+import com.example.appgcm.models.entity.Competition;
+import com.example.appgcm.repositories.CompetitionRepository;
 import com.example.appgcm.dtos.CompetitionDto.CompetitionDto;
 import com.example.appgcm.dtos.RegisterMemberOnCompetitionDto;
-import com.example.appgcm.models.entity.Competition;
-import com.example.appgcm.models.entity.Member;
+import com.example.appgcm.models.entity.AppUser;
 import com.example.appgcm.models.entity.Ranking;
 import com.example.appgcm.models.entity.embedded.MemberCompetition;
-import com.example.appgcm.repositories.*;
+import com.example.appgcm.repositories.RankingRepository;
+import com.example.appgcm.repositories.UserRepository;
 import com.example.appgcm.services.CompetitionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,7 +24,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class CompetitionServiceImpl implements CompetitionService {
-    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
     private final CompetitionRepository competitionRepository;
     private final RankingRepository rankingRepository;
 
@@ -131,7 +133,7 @@ public class CompetitionServiceImpl implements CompetitionService {
         // Check Competition and member if exists
         Optional<Competition> competition = Optional.ofNullable(competitionRepository.findByCode(reqDto.competitionCode())
                 .orElseThrow(() -> new IllegalArgumentException("Sorry this competition not exists!")));
-        Optional<Member> member = Optional.ofNullable(memberRepository.findByIdentityNumber(reqDto.memberIdentity())
+        Optional<AppUser> user = Optional.ofNullable(userRepository.findByIdentityNumber(reqDto.memberIdentity())
                 .orElseThrow(() -> new IllegalArgumentException("Sorry this member not exists!")));
 
         // Check number participant
@@ -146,7 +148,7 @@ public class CompetitionServiceImpl implements CompetitionService {
         }
 
         // Check if member already registered on competition
-        Optional<Ranking> ranking = rankingRepository.findByMemberAndCompetition(member.get(), competition.get());
+        Optional<Ranking> ranking = rankingRepository.findByUserAndCompetition(user.get(), competition.get());
         if (ranking.isPresent()){
             throw new IllegalArgumentException("This member is already registered for this competition!");
         }
@@ -156,10 +158,10 @@ public class CompetitionServiceImpl implements CompetitionService {
             // Now create ranking
             Ranking ranking1 = Ranking.builder()
                     .id(MemberCompetition.builder()
-                            .competitionID(member.get().getId())
-                            .memberID(competition.get().getId())
+                            .competitionID(user.get().getId())
+                            .userID(competition.get().getId())
                             .build())
-                    .member(member.get())
+                    .user(user.get())
                     .competition(competition.get())
                     .rankk(0)
                     .score(0)

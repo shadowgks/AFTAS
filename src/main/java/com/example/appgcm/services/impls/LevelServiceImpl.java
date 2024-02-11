@@ -1,8 +1,8 @@
 package com.example.appgcm.services.impls;
 
+import com.example.appgcm.repositories.LevelRepository;
 import com.example.appgcm.dtos.LevelDto;
 import com.example.appgcm.models.entity.Level;
-import com.example.appgcm.repositories.LevelRepository;
 import com.example.appgcm.services.LevelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

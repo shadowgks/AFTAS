@@ -1,10 +1,10 @@
 package com.example.appgcm.services.impls;
 
+import com.example.appgcm.repositories.FishRepository;
+import com.example.appgcm.repositories.LevelRepository;
 import com.example.appgcm.dtos.FishDto.Requests.FishReqDto;
 import com.example.appgcm.models.entity.Fish;
 import com.example.appgcm.models.entity.Level;
-import com.example.appgcm.repositories.FishRepository;
-import com.example.appgcm.repositories.LevelRepository;
 import com.example.appgcm.services.FishService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

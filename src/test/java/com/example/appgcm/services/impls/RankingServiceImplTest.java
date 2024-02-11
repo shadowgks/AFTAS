@@ -1,24 +1,18 @@
 package com.example.appgcm.services.impls;
 
 import com.example.appgcm.models.entity.Competition;
-import com.example.appgcm.models.entity.Member;
-import com.example.appgcm.models.entity.Ranking;
-import com.example.appgcm.models.enums.IdentityDocumentType;
 import com.example.appgcm.repositories.CompetitionRepository;
 import com.example.appgcm.repositories.RankingRepository;
+import com.example.appgcm.models.entity.AppUser;
+import com.example.appgcm.models.entity.Ranking;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -34,7 +28,7 @@ class RankingServiceImplTest {
     RankingServiceImpl rankingServiceImpl;
 
     Ranking ranking;
-    List<Member> members;
+    List<AppUser> user;
     Competition competition;
 
     @BeforeEach
@@ -47,7 +41,7 @@ class RankingServiceImplTest {
         String codeCompetition = "Test";
         when(competitionRepository.findByCode(codeCompetition))
                 .thenThrow(IllegalArgumentException.class);
-        assertThrows(IllegalArgumentException.class,()->rankingServiceImpl.calculRanking(codeCompetition));
+        assertThrows(IllegalArgumentException.class,()->rankingServiceImpl.calculeRanking(codeCompetition));
     }
 
 }

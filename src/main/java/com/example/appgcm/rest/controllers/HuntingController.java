@@ -1,11 +1,11 @@
 package com.example.appgcm.rest.controllers;
 
-import com.example.appgcm.dtos.HuntingDto.Requests.HuntingReqDto;
-import com.example.appgcm.dtos.HuntingDto.Response.HuntingResDto;
 import com.example.appgcm.mapper.HuntingMapper;
-import com.example.appgcm.models.entity.Hunting;
 import com.example.appgcm.services.HuntingService;
 import com.example.appgcm.utils.Response;
+import com.example.appgcm.dtos.HuntingDto.Requests.HuntingReqDto;
+import com.example.appgcm.dtos.HuntingDto.Response.HuntingResDto;
+import com.example.appgcm.models.entity.Hunting;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

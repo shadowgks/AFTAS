@@ -16,9 +16,9 @@ public class Ranking {
     private Integer score;
     private Integer rankk;
     @ManyToOne
-    @JoinColumn(name = "member_id")
-    @MapsId("memberID")
-    private Member member;
+    @JoinColumn(name = "user_id")
+    @MapsId("userID")
+    private AppUser user;
     @ManyToOne
     @JoinColumn(name = "competition_id")
     @MapsId("competitionID")

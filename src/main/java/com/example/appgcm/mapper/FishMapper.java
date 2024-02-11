@@ -1,7 +1,7 @@
 package com.example.appgcm.mapper;
 
-import com.example.appgcm.dtos.FishDto.Response.FishResDto;
 import com.example.appgcm.models.entity.Fish;
+import com.example.appgcm.dtos.FishDto.Response.FishResDto;
 
 public class FishMapper {
     public static FishResDto mapToDto(Fish fish){

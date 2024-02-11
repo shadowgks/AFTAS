@@ -1,11 +1,11 @@
 package com.example.appgcm.rest.controllers;
 
+import com.example.appgcm.models.entity.Competition;
 import com.example.appgcm.dtos.CompetitionDto.CompetitionDto;
 import com.example.appgcm.dtos.RankingDto.Response.RankingResDto;
 import com.example.appgcm.dtos.RegisterMemberOnCompetitionDto;
 import com.example.appgcm.mapper.CompetitionMapper;
 import com.example.appgcm.mapper.RankingMapper;
-import com.example.appgcm.models.entity.Competition;
 import com.example.appgcm.models.entity.Ranking;
 import com.example.appgcm.services.CompetitionService;
 import com.example.appgcm.utils.Response;
@@ -26,7 +26,6 @@ import java.util.Optional;
 @RequestMapping("/v1/competition")
 @RequiredArgsConstructor
 public class CompetitionController {
-
     private final CompetitionService competitionService;
 
     @PostMapping("/create")

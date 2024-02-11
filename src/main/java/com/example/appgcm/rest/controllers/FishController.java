@@ -1,11 +1,11 @@
 package com.example.appgcm.rest.controllers;
 
-import com.example.appgcm.dtos.FishDto.Requests.FishReqDto;
-import com.example.appgcm.dtos.FishDto.Response.FishResDto;
 import com.example.appgcm.mapper.FishMapper;
 import com.example.appgcm.models.entity.Fish;
 import com.example.appgcm.services.FishService;
 import com.example.appgcm.utils.Response;
+import com.example.appgcm.dtos.FishDto.Requests.FishReqDto;
+import com.example.appgcm.dtos.FishDto.Response.FishResDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

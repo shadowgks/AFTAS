@@ -15,7 +15,7 @@ spring:
       enabled: always
   # Database Configuration
   datasource:
-    url: jdbc:mysql://localhost:3306/appgcm?createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/appgcm_auth?createDatabaseIfNotExist=true
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver

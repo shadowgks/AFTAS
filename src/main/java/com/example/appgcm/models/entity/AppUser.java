@@ -31,10 +31,11 @@ public class AppUser implements UserDetails {
     private String password;
     private LocalDate accessionDate;
     private String nationality;
+    @Enumerated(EnumType.STRING)
     private IdentityDocumentType identityDocumentType;
     @Column(unique = true)
     private String identityNumber;
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "user")
     @JsonBackReference
     private List<Ranking> rankingList;
 
@@ -58,12 +59,12 @@ public class AppUser implements UserDetails {
 
     @Override
     public String getPassword() {
-        return getPassword();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return getUsername();
+        return email;
     }
 
     @Override

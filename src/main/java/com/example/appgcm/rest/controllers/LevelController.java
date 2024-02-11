@@ -1,10 +1,10 @@
 package com.example.appgcm.rest.controllers;
 
-import com.example.appgcm.dtos.LevelDto;
 import com.example.appgcm.mapper.LevelMapper;
 import com.example.appgcm.models.entity.Level;
 import com.example.appgcm.services.LevelService;
 import com.example.appgcm.utils.Response;
+import com.example.appgcm.dtos.LevelDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -18,5 +18,5 @@ public class Hunting {
     @ManyToOne
     private Fish fish;
     @ManyToOne
-    private Member member;
+    private AppUser user;
 }

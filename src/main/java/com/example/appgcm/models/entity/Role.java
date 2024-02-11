@@ -15,6 +15,7 @@ import java.util.Set;
 public class Role {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Enumerated(EnumType.STRING)
     private RoleType name;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -23,5 +24,5 @@ public class Role {
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
-    private Set<Persmission> permissions;
+    private Set<Permission> permissions;
 }

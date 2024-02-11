@@ -1,8 +1,8 @@
 package com.example.appgcm.services.impls;
 
 import com.example.appgcm.models.entity.Competition;
-import com.example.appgcm.models.entity.Ranking;
 import com.example.appgcm.repositories.CompetitionRepository;
+import com.example.appgcm.models.entity.Ranking;
 import com.example.appgcm.repositories.RankingRepository;
 import com.example.appgcm.services.RankingService;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +19,12 @@ public class RankingServiceImpl implements RankingService {
     private final RankingRepository rankingRepository;
     private final CompetitionRepository competitionRepository;
     @Override
-    public List<Ranking> RankingListCompetition(String codeCompetition) {
-       return rankingRepository.saveAll(calculRanking(codeCompetition));
+    public List<Ranking> rankingListCompetition(String codeCompetition) {
+       return rankingRepository.saveAll(calculeRanking(codeCompetition));
     }
 
     @Override
-    public List<Ranking> calculRanking(String codeCompetition){
+    public List<Ranking> calculeRanking(String codeCompetition){
         Optional<Competition> competition1 = Optional.of(competitionRepository.findByCode(codeCompetition))
                 .orElseThrow(() -> new IllegalArgumentException("Not found this Competition!"));
 

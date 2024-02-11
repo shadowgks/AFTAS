@@ -1,7 +1,7 @@
 package com.example.appgcm.seeder.dbSeeders;
 
-import com.example.appgcm.models.entity.Level;
 import com.example.appgcm.repositories.LevelRepository;
+import com.example.appgcm.models.entity.Level;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;

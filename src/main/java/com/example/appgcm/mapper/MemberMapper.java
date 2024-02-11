@@ -1,18 +1,17 @@
 package com.example.appgcm.mapper;
 
 import com.example.appgcm.dtos.MemberDto;
-import com.example.appgcm.models.entity.Member;
+import com.example.appgcm.models.entity.AppUser;
 
 public class MemberMapper {
-    public static MemberDto mapToDto(Member member){
+    public static MemberDto mapToDto(AppUser user){
         return MemberDto.builder()
-                .id(member.getId())
-                .firstName(member.getFirstName())
-                .lastName(member.getLastName())
-                .accessionDate(member.getAccessionDate())
-                .nationality(member.getNationality())
-                .identityDocumentType(member.getIdentityDocumentType())
-                .identityNumber(member.getIdentityNumber())
+                .id(user.getId())
+                .firstName(user.getFullName())
+                .accessionDate(user.getAccessionDate())
+                .nationality(user.getNationality())
+                .identityDocumentType(user.getIdentityDocumentType())
+                .identityNumber(user.getIdentityNumber())
                 .build();
     }
 }

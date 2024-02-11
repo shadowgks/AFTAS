@@ -2,15 +2,14 @@ package com.example.appgcm.services.impls;
 
 import com.example.appgcm.dtos.HuntingDto.Requests.HuntingReqDto;
 import com.example.appgcm.models.entity.*;
-import com.example.appgcm.models.entity.embedded.MemberCompetition;
 import com.example.appgcm.repositories.*;
 import com.example.appgcm.services.HuntingService;
+import com.example.appgcm.models.entity.embedded.MemberCompetition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Optional;
 
 @Service
@@ -18,7 +17,7 @@ import java.util.Optional;
 public class HuntingServiceImpl implements HuntingService {
     private final HuntingRepository huntingRepository;
     private final FishRepository fishRepository;
-    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
     private final CompetitionRepository competitionRepository;
     private final RankingRepository rankingRepository;
 
@@ -29,10 +28,10 @@ public class HuntingServiceImpl implements HuntingService {
                 .orElseThrow(() -> new IllegalArgumentException("Sorry this fish not exists!")));
         Optional<Competition> competition = Optional.ofNullable(competitionRepository.findByCode(huntingDto.competitionCode())
                 .orElseThrow(() -> new IllegalArgumentException("Sorry this competition not exists!")));
-        Optional<Member> member = Optional.ofNullable(memberRepository.findByIdentityNumber(huntingDto.memberIdentity())
-                .orElseThrow(() -> new IllegalArgumentException("Sorry this member not exists!")));
-        Optional<Ranking> getMemberAndCompetition = Optional.ofNullable(rankingRepository.findByMemberAndCompetition(member.get(), competition.get())
-                .orElseThrow(() -> new IllegalArgumentException("Sorry this member does not register yet in the competition!")));
+        Optional<AppUser> user = Optional.ofNullable(userRepository.findByIdentityNumber(huntingDto.memberIdentity())
+                .orElseThrow(() -> new IllegalArgumentException("Sorry this user not exists!")));
+        Optional<Ranking> getMemberAndCompetition = Optional.ofNullable(rankingRepository.findByUserAndCompetition(user.get(), competition.get())
+                .orElseThrow(() -> new IllegalArgumentException("Sorry this user does not register yet in the competition!")));
 
         // Check average weight
         if (huntingDto.weight() < fish.get().getAverageWeight()){
@@ -50,7 +49,7 @@ public class HuntingServiceImpl implements HuntingService {
         // Check CompetitionAndMemberAndFish if exists | Update Hunting
         Integer scoreMemberInRanking = getMemberAndCompetition.get().getScore();
         Integer getPointFish = fish.get().getLevel().getPoints();
-        Optional<Hunting> findByCompetitionAndMemberAndFish = huntingRepository.findByCompetitionAndMemberAndFish(competition.get(), member.get(), fish.get());
+        Optional<Hunting> findByCompetitionAndMemberAndFish = huntingRepository.findByCompetitionAndUserAndFish(competition.get(), user.get(), fish.get());
         if (findByCompetitionAndMemberAndFish.isPresent()){
             Hunting huntingData = findByCompetitionAndMemberAndFish.get();
             Hunting updateHunting = Hunting.builder()
@@ -58,19 +57,19 @@ public class HuntingServiceImpl implements HuntingService {
                     .fish(huntingData.getFish())
                     .numberOfFish(huntingData.getNumberOfFish() + 1)
                     .competition(huntingData.getCompetition())
-                    .member(huntingData.getMember())
+                    .user(huntingData.getUser())
                     .build();
 
-            // Create Score Member in ranking
+            // Create Score user in ranking
             Integer getNumberFishMemberOnHunting = huntingData.getNumberOfFish();
             Ranking ranking1 = Ranking.builder()
                     .id(MemberCompetition.builder()
-                            .memberID(member.get().getId())
+                            .userID(user.get().getId())
                             .competitionID(competition.get().getId())
                             .build())
                     .score(getPointFish + scoreMemberInRanking)
                     .competition(competition.get())
-                    .member(member.get())
+                    .user(user.get())
                     .build();
             rankingRepository.save(ranking1);
             return huntingRepository.save(updateHunting);
@@ -80,19 +79,19 @@ public class HuntingServiceImpl implements HuntingService {
         Hunting createHunting = Hunting.builder()
                 .fish(fish.get())
                 .competition(competition.get())
-                .member(member.get())
+                .user(user.get())
                 .numberOfFish(1)
                 .build();
 
         // Create Ranking
         Ranking ranking1 = Ranking.builder()
                 .id(MemberCompetition.builder()
-                        .memberID(member.get().getId())
+                        .userID(user.get().getId())
                         .competitionID(competition.get().getId())
                         .build())
                 .score(getPointFish + scoreMemberInRanking)
                 .competition(competition.get())
-                .member(member.get())
+                .user(user.get())
                 .build();
         rankingRepository.save(ranking1);
         return huntingRepository.save(createHunting);

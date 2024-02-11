@@ -2,9 +2,11 @@ package com.example.appgcm.services.impls;
 
 import com.example.appgcm.dtos.HuntingDto.Requests.HuntingReqDto;
 import com.example.appgcm.models.entity.*;
-import com.example.appgcm.models.entity.embedded.MemberCompetition;
 import com.example.appgcm.models.enums.IdentityDocumentType;
 import com.example.appgcm.repositories.*;
+import ma.youcode.aftas.models.entity.*;
+import com.example.appgcm.models.entity.embedded.MemberCompetition;
+import ma.youcode.aftas.repositories.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -28,7 +30,7 @@ public class HuntingServiceImplTest {
     @Mock
     FishRepository fishRepository;
     @Mock
-    MemberRepository memberRepository;
+    UserRepository userRepository;
     @Mock
     HuntingRepository huntingRepository;
 
@@ -69,10 +71,9 @@ public class HuntingServiceImplTest {
                 .amount(100.0)
                 .build();
 
-        Member member = Member.builder()
+        AppUser user = AppUser.builder()
                 .id(1L)
-                .firstName("ikram")
-                .lastName("moumou")
+                .fullName("ikram moumou")
                 .accessionDate(LocalDate.now())
                 .nationality("USA")
                 .identityDocumentType(IdentityDocumentType.PASSPORT)
@@ -85,22 +86,22 @@ public class HuntingServiceImplTest {
                 .numberOfFish(1)
                 .competition(competition)
                 .fish(fish)
-                .member(member)
+                .user(user)
                 .build();
 
         Ranking ranking = Ranking.builder()
-                .id(MemberCompetition.builder().memberID(1L).competitionID(1L).build())
+                .id(MemberCompetition.builder().userID(1L).competitionID(1L).build())
                 .score(10)
                 .rankk(1)
-                .member(member)
+                .user(user)
                 .competition(competition)
                 .build();
 
         when(fishRepository.findByName("Salmon")).thenReturn(Optional.of(fish));
         when(competitionRepository.findByCode("COMP001")).thenReturn(Optional.of(competition));
-        when(memberRepository.findByIdentityNumber("1234567890")).thenReturn(Optional.of(member));
-        when(rankingRepository.findByMemberAndCompetition(member, competition)).thenReturn(Optional.of(ranking));
-        when(huntingRepository.findByCompetitionAndMemberAndFish(competition, member, fish)).thenReturn(Optional.empty());
+        when(userRepository.findByIdentityNumber("1234567890")).thenReturn(Optional.of(user));
+        when(rankingRepository.findByUserAndCompetition(user, competition)).thenReturn(Optional.of(ranking));
+        when(huntingRepository.findByCompetitionAndUserAndFish(competition, user, fish)).thenReturn(Optional.empty());
         when(huntingRepository.save(any(Hunting.class))).thenReturn(hunting);
         when(rankingRepository.save(any(Ranking.class))).thenReturn(ranking);
 
@@ -111,7 +112,7 @@ public class HuntingServiceImplTest {
         assertNotNull(result);
         assertEquals(competition, result.getCompetition());
         assertEquals(fish, result.getFish());
-        assertEquals(member, result.getMember());
+        assertEquals(user, result.getUser());
     }
 
     @Test
@@ -142,10 +143,9 @@ public class HuntingServiceImplTest {
                 .amount(100.0)
                 .build();
 
-        Member member = Member.builder()
+        AppUser user = AppUser.builder()
                 .id(1L)
-                .firstName("John")
-                .lastName("Doe")
+                .fullName("John Doe")
                 .accessionDate(LocalDate.now())
                 .nationality("USA")
                 .identityDocumentType(IdentityDocumentType.PASSPORT)
@@ -158,26 +158,26 @@ public class HuntingServiceImplTest {
                 .numberOfFish(1)
                 .competition(competition)
                 .fish(fish)
-                .member(member)
+                .user(user)
                 .build();
 
         Ranking ranking = Ranking.builder()
-                .id(MemberCompetition.builder().memberID(1L).competitionID(1L).build())
+                .id(MemberCompetition.builder().userID(1L).competitionID(1L).build())
                 .score(10)
                 .rankk(1)
-                .member(member)
+                .user(user)
                 .competition(competition)
                 .build();
 
         when(fishRepository.findByName("Salmon")).thenReturn(Optional.of(fish));
         when(competitionRepository.findByCode("COMP001")).thenReturn(Optional.of(competition));
-        when(memberRepository.findByIdentityNumber("1234567890")).thenReturn(Optional.of(member));
-        when(rankingRepository.findByMemberAndCompetition(member, competition)).thenReturn(Optional.of(ranking));
-        when(huntingRepository.findByCompetitionAndMemberAndFish(competition, member, fish)).thenReturn(Optional.of(existingHunting));
+        when(userRepository.findByIdentityNumber("1234567890")).thenReturn(Optional.of(user));
+        when(rankingRepository.findByUserAndCompetition(user, competition)).thenReturn(Optional.of(ranking));
+        when(huntingRepository.findByCompetitionAndUserAndFish(competition, user, fish)).thenReturn(Optional.of(existingHunting));
         when(huntingRepository.save(any(Hunting.class))).thenReturn(existingHunting);
         when(rankingRepository.save(any(Ranking.class))).thenReturn(ranking);
 
-        HuntingServiceImpl huntingService = new HuntingServiceImpl(huntingRepository, fishRepository, memberRepository, competitionRepository, rankingRepository);
+        HuntingServiceImpl huntingService = new HuntingServiceImpl(huntingRepository, fishRepository, userRepository, competitionRepository, rankingRepository);
 
         // Act
         Hunting result = huntingService.sumHuntingFish(huntingDto);
@@ -186,7 +186,7 @@ public class HuntingServiceImplTest {
         assertNotNull(result);
         assertEquals(competition, result.getCompetition());
         assertEquals(fish, result.getFish());
-        assertEquals(member, result.getMember());
+        assertEquals(user, result.getUser());
     }
 
 }
