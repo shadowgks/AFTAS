@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/member")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyAuthority('MEMBER:ALL')")
 public class MemberController {
     private final UserService userService;
 
@@ -29,7 +31,7 @@ public class MemberController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Response<MemberDto>> findMemberByid(@Valid @PathVariable Long id){
+    public ResponseEntity<Response<MemberDto>> findMemberById(@Valid @PathVariable Long id){
         Response<MemberDto> response = new Response<>();
         AppUser user = userService.findMemberById(id);
         response.setResult(MemberMapper.mapToDto(user));

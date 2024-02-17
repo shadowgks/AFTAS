@@ -55,7 +55,7 @@ public class UserSeeder {
                 if (roleType.equals(RoleType.ADMIN)){
                     Role role = Role.builder()
                             .name(roleType)
-                            .permissions(permissions)
+                            .permissions(permissions.stream().filter(p -> p.getAction().equals(ActionType.ALL)).collect(Collectors.toSet()))
                             .build();
                     roleRepository.save(role);
                 }

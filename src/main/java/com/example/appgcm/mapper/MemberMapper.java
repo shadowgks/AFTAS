@@ -7,7 +7,7 @@ public class MemberMapper {
     public static MemberDto mapToDto(AppUser user){
         return MemberDto.builder()
                 .id(user.getId())
-                .firstName(user.getFullName())
+                .fullName(user.getFullName())
                 .accessionDate(user.getAccessionDate())
                 .nationality(user.getNationality())
                 .identityDocumentType(user.getIdentityDocumentType())

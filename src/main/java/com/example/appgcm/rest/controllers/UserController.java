@@ -1,6 +1,6 @@
 package com.example.appgcm.rest.controllers;
 
-import com.example.appgcm.config.JwtService;
+import com.example.appgcm.config.service.JwtService;
 import com.example.appgcm.dtos.UserDto.Req.LoginReqDTO;
 import com.example.appgcm.dtos.UserDto.Req.RegisterReqDTO;
 import com.example.appgcm.dtos.UserDto.Res.UserResDTO;

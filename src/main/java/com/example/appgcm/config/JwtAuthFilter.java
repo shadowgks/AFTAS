@@ -1,5 +1,6 @@
 package com.example.appgcm.config;
 
+import com.example.appgcm.config.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

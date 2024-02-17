@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
 
         // Add member
         AppUser member1 = AppUser.builder()
-                .fullName(member.firstName())
+                .fullName(member.fullName())
                 .accessionDate(LocalDate.now())
                 .nationality(member.nationality())
                 .identityDocumentType(member.identityDocumentType())

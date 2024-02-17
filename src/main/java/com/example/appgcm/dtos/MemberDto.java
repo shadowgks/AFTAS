@@ -9,12 +9,9 @@ import java.time.LocalDate;
 @Builder
 public record MemberDto(
         Long id,
-        @NotNull(message = "First name is required")
-        @NotBlank(message = "First name cannot be blank")
-        String firstName,
-        @NotNull(message = "Last name is required")
-        @NotBlank(message = "Last name cannot be blank")
-        String lastName,
+        @NotNull(message = "Full name is required")
+        @NotBlank(message = "Full name cannot be blank")
+        String fullName,
         LocalDate accessionDate,
         @NotNull(message = "Nationality is required")
         @NotBlank(message = "Nationality cannot be blank")

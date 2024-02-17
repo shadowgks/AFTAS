@@ -50,9 +50,11 @@ public class AppUser implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        roles.forEach(role -> authorities.add(new SimpleGrantedAuthority("ROLE:" + role.getName())));
+
         roles.forEach(role ->
                         role.getPermissions().forEach(persmission ->
-                                authorities.add(new SimpleGrantedAuthority(persmission.getSubject())))
+                                authorities.add(new SimpleGrantedAuthority(persmission.getSubject()+ ":" +persmission.getAction())))
         );
         return authorities;
     }
