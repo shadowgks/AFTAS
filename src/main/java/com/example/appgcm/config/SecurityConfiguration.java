@@ -21,20 +21,12 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
-    @Autowired
-    @Qualifier("handlerExceptionResolver")
-    private HandlerExceptionResolver handlerExceptionResolver;
-    @Autowired
-    private AuthenticationProvider authenticationProvider;
-
-    @Bean
-    public JwtAuthFilter jwtAuthFilter(){
-        return new JwtAuthFilter(handlerExceptionResolver);
-    }
-
+    private final AuthenticationProvider authenticationProvider;
+    private final JwtAuthFilter jwtAuthFilter;
 
     @Bean
     public SecurityFilterChain config(HttpSecurity http) throws Exception {
@@ -45,7 +37,7 @@ public class SecurityConfiguration {
                                 .permitAll().anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 //                .exceptionHandling(exception ->
 //                        exception.authenticationEntryPoint((request, response, ex) ->
 //                            response.sendError(

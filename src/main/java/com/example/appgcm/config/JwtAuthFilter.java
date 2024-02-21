@@ -22,18 +22,10 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import java.io.IOException;
 
 @Component
+@RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
-    @Autowired
-    private JwtService jwtService;
-    @Autowired
-    private UserDetailsService userDetailsService;
-
-    private HandlerExceptionResolver handlerExceptionResolver;
-    @Autowired
-    public JwtAuthFilter(HandlerExceptionResolver handlerExceptionResolver) {
-        this.handlerExceptionResolver = handlerExceptionResolver;
-    }
-
+    private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(
@@ -42,7 +34,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             @NotNull FilterChain filterChain)
             throws ServletException, IOException {
 
-        try {
             final String AUTH_HEADER = request.getHeader("Authorization");
             final String JWT;
             final String USER;
@@ -70,8 +61,5 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
             filterChain.doFilter(request, response);
 
-        }catch (ExpiredJwtException | SignatureException ex){
-            handlerExceptionResolver.resolveException(request, response, null, ex);
-        }
     }
 }
