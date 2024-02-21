@@ -1,7 +1,7 @@
 package com.example.appgcm.rest.controllers;
 
 import com.example.appgcm.mapper.RankingMapper;
-import com.example.appgcm.utils.Response;
+import com.example.appgcm.utils._Response;
 import com.example.appgcm.dtos.RankingDto.Response.RankingResDto;
 import com.example.appgcm.models.entity.Ranking;
 import com.example.appgcm.services.RankingService;
@@ -23,8 +23,8 @@ public class RankingController {
     private final RankingService rankingService;
 
     @GetMapping("{codeCompetition}")
-    public ResponseEntity<Response<List<RankingResDto>>> listRankingByCompetition(@Valid @PathVariable("codeCompetition") String codeCompetition){
-        Response<List<RankingResDto>> response = new Response<>();
+    public ResponseEntity<_Response<List<RankingResDto>>> listRankingByCompetition(@Valid @PathVariable("codeCompetition") String codeCompetition){
+        _Response<List<RankingResDto>> response = new _Response<>();
 
         //List Ranking
         List<Ranking> rankingList = rankingService.rankingListCompetition(codeCompetition);

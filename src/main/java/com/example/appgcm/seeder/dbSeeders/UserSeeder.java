@@ -10,7 +10,6 @@ import com.example.appgcm.repositories.PermissionRepository;
 import com.example.appgcm.repositories.RoleRepository;
 import com.example.appgcm.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +28,6 @@ public class UserSeeder {
     private final Set<String> subjects = Set.of(
             "user",
             "competition",
-            "member",
             "hunting",
             "ranking"
     );
@@ -52,14 +50,21 @@ public class UserSeeder {
 
         if (roleRepository.findAll().isEmpty()){
             for (RoleType roleType : RoleType.values()) {
-                if (roleType.equals(RoleType.ADMIN)){
+                if (roleType.equals(RoleType.MANAGER)){
                     Role role = Role.builder()
                             .name(roleType)
                             .permissions(permissions.stream().filter(p -> p.getAction().equals(ActionType.ALL)).collect(Collectors.toSet()))
                             .build();
                     roleRepository.save(role);
                 }
-                if(roleType.equals(RoleType.MEMBER)){
+                if(roleType.equals(RoleType.JURY)){
+                    Role role = Role.builder()
+                            .name(roleType)
+                            .permissions(permissions.stream().filter(p -> p.getAction().equals(ActionType.ALL)).collect(Collectors.toSet()))
+                            .build();
+                    roleRepository.save(role);
+                }
+                if(roleType.equals(RoleType.ADHERENT)){
                     Role role = Role.builder()
                             .name(roleType)
                             .permissions(permissions.stream().filter(p -> p.getAction().equals(ActionType.READ)).collect(Collectors.toSet()))
@@ -71,14 +76,14 @@ public class UserSeeder {
             if(userRepository.findAll().isEmpty()){
                 AppUser user = AppUser.builder()
                         .fullName("saad moumou")
-                        .email("saad@admin.com")
+                        .email("saad@manager.com")
                         .userName("saadmomo")
                         .identityNumber("ha234567")
                         .nationality("maroc")
                         .identityDocumentType(IdentityDocumentType.CIN)
                         .password(passwordEncoder.encode("12345678999"))
                         .build();
-                roleRepository.findRoleByName(RoleType.ADMIN).ifPresent(role -> user.setRoles(Set.of(role)));
+                roleRepository.findRoleByName(RoleType.MANAGER).ifPresent(role -> user.setRoles(Set.of(role)));
                 userRepository.save(user);
             }
         }

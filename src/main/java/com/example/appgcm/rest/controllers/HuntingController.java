@@ -2,7 +2,7 @@ package com.example.appgcm.rest.controllers;
 
 import com.example.appgcm.mapper.HuntingMapper;
 import com.example.appgcm.services.HuntingService;
-import com.example.appgcm.utils.Response;
+import com.example.appgcm.utils._Response;
 import com.example.appgcm.dtos.HuntingDto.Requests.HuntingReqDto;
 import com.example.appgcm.dtos.HuntingDto.Response.HuntingResDto;
 import com.example.appgcm.models.entity.Hunting;
@@ -22,8 +22,8 @@ public class HuntingController {
     private final HuntingService huntingService;
 
     @PostMapping("/hunt")
-    public ResponseEntity<Response<HuntingResDto>> createHunting(@Valid @RequestBody HuntingReqDto reqDto){
-        Response<HuntingResDto> response = new Response<>();
+    public ResponseEntity<_Response<HuntingResDto>> createHunting(@Valid @RequestBody HuntingReqDto reqDto){
+        _Response<HuntingResDto> response = new _Response<>();
         Hunting hunting = huntingService.sumHuntingFish(reqDto);
         response.setMessage("Hunting successfully");
         response.setResult(HuntingMapper.mapToDto(hunting));

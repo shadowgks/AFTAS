@@ -27,7 +27,12 @@ public class Competition {
     private Integer numberOfParticipants;
     private String location;
     private Double amount;
+
     @OneToMany(mappedBy = "competition")
     @JsonBackReference
     private List<Ranking> rankingList;
+
+    @ManyToOne
+    @JsonBackReference
+    private AppUser user;
 }

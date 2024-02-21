@@ -47,9 +47,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AppUser findMemberById(Long id) {
-        Optional<AppUser> member = Optional.ofNullable(userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Not found Member " + id)));
-        return member.get();
+        return userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Not found Member " + id));
     }
 
     @Override
@@ -79,7 +78,7 @@ public class UserServiceImpl implements UserService {
                 .fullName(req.getFullName())
                 .password(passwordEncoder.encode(req.getPassword()))
                 .build();
-        roleRepository.findRoleByName(RoleType.MEMBER).ifPresent(role -> user.setRoles(Set.of(role)));
+        roleRepository.findRoleByName(RoleType.ADHERENT).ifPresent(role -> user.setRoles(Set.of(role)));
         return userRepository.save(user);
     }
 

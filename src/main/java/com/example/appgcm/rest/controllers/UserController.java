@@ -4,7 +4,7 @@ import com.example.appgcm.config.service.JwtService;
 import com.example.appgcm.dtos.UserDto.Req.LoginReqDTO;
 import com.example.appgcm.dtos.UserDto.Req.RegisterReqDTO;
 import com.example.appgcm.dtos.UserDto.Res.UserResDTO;
-import com.example.appgcm.utils.Response;
+import com.example.appgcm.utils._Response;
 import jakarta.validation.Valid;
 import com.example.appgcm.mapper.UserMapper;
 import com.example.appgcm.models.entity.AppUser;
@@ -35,7 +35,7 @@ public class UserController {
 //    }
     @PostMapping("/register")
     public ResponseEntity<UserResDTO> register(@Valid @RequestBody RegisterReqDTO registerReqDTO){
-        Response<UserResDTO> response = new Response();
+        _Response<UserResDTO> response = new _Response();
         AppUser user = userService.register(UserMapper.toEntity(registerReqDTO));
         //generate new Token
         String jwtToken = jwtService.generateToken(user);
@@ -43,7 +43,7 @@ public class UserController {
     }
     @PostMapping("/authenticate")
     public ResponseEntity<UserResDTO> authenticate(@Valid @RequestBody LoginReqDTO loginReqDTO){
-        Response<UserResDTO> response = new Response();
+        _Response<UserResDTO> response = new _Response();
         AppUser user = userService.authenticate(UserMapper.toEntity(loginReqDTO));
         //generate new Token
         String jwtToken = jwtService.generateToken(user);

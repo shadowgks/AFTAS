@@ -32,10 +32,11 @@ public class JwtService {
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails){
-        extraClaims.put("email", userDetails.getUsername());
-        extraClaims.put("role", userDetails.getAuthorities()); // Assuming you have a method to get the user's role
+//        extraClaims.put("email", userDetails.getUsername());
+//        extraClaims.put("role", userDetails.getAuthorities()); // Assuming you have a method to get the user's role
         return Jwts.builder()
                 .setClaims(extraClaims)
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)

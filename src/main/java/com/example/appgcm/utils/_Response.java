@@ -8,7 +8,7 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class Response<T>{
+public class _Response<T>{
     private String message;
     private T result;
     private Map<String, String> errorsValidation;

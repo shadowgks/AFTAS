@@ -48,16 +48,14 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     @Override
     public Competition findByDateCompetition(LocalDate date) {
-        Optional<Competition> competition = Optional.ofNullable(competitionRepository.findByDate(date)
-                .orElseThrow(() -> new IllegalArgumentException("Not found Competition By Date " +date)));
-        return competition.get();
+        return competitionRepository.findByDate(date)
+                .orElseThrow(() -> new IllegalArgumentException("Not found Competition By Date " +date));
     }
 
     @Override
     public Competition findByCodeCompetition(String code) {
-         Optional<Competition> competition = Optional.ofNullable(competitionRepository.findByCode(code)
-                .orElseThrow(() -> new IllegalArgumentException("Not found Competition By Code " +code)));
-        return competition.get();
+        return competitionRepository.findByCode(code)
+                .orElseThrow(() -> new IllegalArgumentException("Not found Competition By Code " +code));
     }
 
     @Override
@@ -103,7 +101,7 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     @Override
     public Competition updateCompetition(Long id, CompetitionDto reqDto) {
-        Optional<Competition> competition = Optional.of(competitionRepository.findById(id))
+        Competition competition = competitionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Not found this Competition!"));
 
         // Substring location
@@ -116,7 +114,7 @@ public class CompetitionServiceImpl implements CompetitionService {
 
         //Builder Competition
         Competition competition1 = Competition.builder()
-                .id(competition.get().getId())
+                .id(competition.getId())
                 .code(codeDone)
                 .amount(reqDto.amount())
                 .date(reqDto.date())
@@ -131,38 +129,38 @@ public class CompetitionServiceImpl implements CompetitionService {
     @Override
     public Ranking registerMember(RegisterMemberOnCompetitionDto reqDto) {
         // Check Competition and member if exists
-        Optional<Competition> competition = Optional.ofNullable(competitionRepository.findByCode(reqDto.competitionCode())
-                .orElseThrow(() -> new IllegalArgumentException("Sorry this competition not exists!")));
-        Optional<AppUser> user = Optional.ofNullable(userRepository.findByIdentityNumber(reqDto.memberIdentity())
-                .orElseThrow(() -> new IllegalArgumentException("Sorry this member not exists!")));
+        Competition competition = competitionRepository.findByCode(reqDto.competitionCode())
+                .orElseThrow(() -> new IllegalArgumentException("Sorry this competition not exists!"));
+        AppUser user = userRepository.findByIdentityNumber(reqDto.memberIdentity())
+                .orElseThrow(() -> new IllegalArgumentException("Sorry this member not exists!"));
 
         // Check number participant
-        Integer numP = competition.get().getNumberOfParticipants();
-        Integer countAllByCompetition = rankingRepository.countByCompetition(competition.get());
+        Integer numP = competition.getNumberOfParticipants();
+        Integer countAllByCompetition = rankingRepository.countByCompetition(competition);
         if (countAllByCompetition >= numP){
             throw new IllegalArgumentException("Competition It has arrived maximum number of members: "+ numP);
         }
 
-        if(competition.get().getDate().isBefore(LocalDate.now())){
+        if(competition.getDate().isBefore(LocalDate.now())){
             throw new IllegalArgumentException("You can not registered in this competition because date of competition is expired");
         }
 
         // Check if member already registered on competition
-        Optional<Ranking> ranking = rankingRepository.findByUserAndCompetition(user.get(), competition.get());
+        Optional<Ranking> ranking = rankingRepository.findByUserAndCompetition(user, competition);
         if (ranking.isPresent()){
             throw new IllegalArgumentException("This member is already registered for this competition!");
         }
 
         // Check date registered before 24h in competition
-        if (checkRegisterBefore24(competition.get())){
+        if (checkRegisterBefore24(competition)){
             // Now create ranking
             Ranking ranking1 = Ranking.builder()
                     .id(MemberCompetition.builder()
-                            .competitionID(user.get().getId())
-                            .userID(competition.get().getId())
+                            .competitionID(user.getId())
+                            .userID(competition.getId())
                             .build())
-                    .user(user.get())
-                    .competition(competition.get())
+                    .user(user)
+                    .competition(competition)
                     .rankk(0)
                     .score(0)
                     .build();
