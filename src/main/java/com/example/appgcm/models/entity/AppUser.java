@@ -29,7 +29,7 @@ public class AppUser implements UserDetails {
     @Column(unique = true)
     private String email;
     @Column(unique = true)
-    private String userName;
+    private String userNamee;
     private String password;
     private LocalDate accessionDate;
     private String nationality;

@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public AppUser register(AppUser req) {
         AppUser user = AppUser.builder()
-                .userName(req.getUsername())
+                .userNamee(req.getUserNamee())
                 .email(req.getEmail())
                 .nationality(req.getNationality())
                 .fullName(req.getFullName())
@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
                         req.getPassword()
                 )
         );
-        return userRepository.findByEmailOrUserName(req.getEmail(), req.getUsername())
+        return userRepository.findByEmailOrUserNamee(req.getEmail(), req.getUsername())
                 .orElseThrow(() -> new IllegalArgumentException("Not Found Any User"));
     }
 

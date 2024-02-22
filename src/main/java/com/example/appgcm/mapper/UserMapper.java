@@ -10,7 +10,7 @@ public class UserMapper {
         return AppUser.builder()
                 .email(registerReqDto.email())
                 .password(registerReqDto.password())
-                .userName(registerReqDto.userName())
+                .userNamee(registerReqDto.userName())
                 .fullName(registerReqDto.fullName())
                 .identityNumber(registerReqDto.identityNumber())
                 .identityDocumentType(registerReqDto.identityDocumentType())

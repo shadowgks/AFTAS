@@ -77,8 +77,8 @@ public class UserSeeder {
             if(userRepository.findAll().isEmpty()){
                 AppUser user = AppUser.builder()
                         .fullName("saad moumou")
+                        .userNamee("saadmomo")
                         .email("saad@manager.com")
-                        .userName("saadmomo")
                         .identityNumber("ha234567")
                         .nationality("maroc")
                         .accessionDate(LocalDate.now())
