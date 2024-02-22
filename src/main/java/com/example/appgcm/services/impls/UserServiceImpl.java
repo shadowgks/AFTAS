@@ -66,6 +66,7 @@ public class UserServiceImpl implements UserService {
                 .nationality(member.nationality())
                 .identityDocumentType(member.identityDocumentType())
                 .identityNumber(member.identityNumber())
+                .isWorking(true)
                 .build();
         return userRepository.save(member1);
     }
@@ -75,8 +76,13 @@ public class UserServiceImpl implements UserService {
         AppUser user = AppUser.builder()
                 .userName(req.getUsername())
                 .email(req.getEmail())
+                .nationality(req.getNationality())
                 .fullName(req.getFullName())
+                .identityDocumentType(req.getIdentityDocumentType())
+                .identityNumber(req.getIdentityNumber())
                 .password(passwordEncoder.encode(req.getPassword()))
+                .accessionDate(LocalDate.now())
+                .isWorking(false)
                 .build();
         roleRepository.findRoleByName(RoleType.ADHERENT).ifPresent(role -> user.setRoles(Set.of(role)));
         return userRepository.save(user);

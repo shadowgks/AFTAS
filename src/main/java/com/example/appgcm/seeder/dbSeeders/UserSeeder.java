@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -80,6 +81,8 @@ public class UserSeeder {
                         .userName("saadmomo")
                         .identityNumber("ha234567")
                         .nationality("maroc")
+                        .accessionDate(LocalDate.now())
+                        .isWorking(true)
                         .identityDocumentType(IdentityDocumentType.CIN)
                         .password(passwordEncoder.encode("12345678999"))
                         .build();

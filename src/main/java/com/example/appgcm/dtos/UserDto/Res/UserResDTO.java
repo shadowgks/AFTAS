@@ -8,7 +8,5 @@ import java.util.Set;
 @Builder
 public record UserResDTO(
         String accessToken,
-        String fullName,
-        String username,
-        String email,
-        Set<Role> roles) { }
+        String refreshToken
+){}

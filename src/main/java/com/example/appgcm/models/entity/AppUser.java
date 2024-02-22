@@ -26,7 +26,9 @@ public class AppUser implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String fullName;
+    @Column(unique = true)
     private String email;
+    @Column(unique = true)
     private String userName;
     private String password;
     private LocalDate accessionDate;
@@ -35,7 +37,8 @@ public class AppUser implements UserDetails {
     private IdentityDocumentType identityDocumentType;
     @Column(unique = true)
     private String identityNumber;
-    private String isWorking;
+    @Column(nullable = false)
+    private Boolean isWorking;
 
     @OneToMany(mappedBy = "user")
     @JsonBackReference
@@ -44,6 +47,7 @@ public class AppUser implements UserDetails {
     @OneToMany(mappedBy = "user")
     @JsonBackReference
     private List<Competition> competitionList;
+
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -54,10 +58,9 @@ public class AppUser implements UserDetails {
     private Set<Role> roles;
 
     @Override
-    public Collection<? extends SimpleGrantedAuthority> getAuthorities() {
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-//        roles.forEach(role -> authorities.add(new SimpleGrantedAuthority("ROLE:" + role.getName())));
-
+        roles.forEach(role -> authorities.add(new SimpleGrantedAuthority("ROLE:" + role.getName())));
         roles.forEach(role ->
                         role.getPermissions().forEach(persmission ->
                                 authorities.add(new SimpleGrantedAuthority(persmission.getSubject()+ ":" +persmission.getAction())))

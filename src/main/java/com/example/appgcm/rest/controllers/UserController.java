@@ -38,15 +38,15 @@ public class UserController {
         _Response<UserResDTO> response = new _Response();
         AppUser user = userService.register(UserMapper.toEntity(registerReqDTO));
         //generate new Token
-        String jwtToken = jwtService.generateToken(user);
-        return new ResponseEntity<>(UserMapper.toDto(user, jwtToken), HttpStatus.CREATED);
+        String accessToken = jwtService.generateAccessToken(user);
+        return new ResponseEntity<>(UserMapper.toDto(accessToken, accessToken), HttpStatus.CREATED);
     }
     @PostMapping("/authenticate")
     public ResponseEntity<UserResDTO> authenticate(@Valid @RequestBody LoginReqDTO loginReqDTO){
         _Response<UserResDTO> response = new _Response();
         AppUser user = userService.authenticate(UserMapper.toEntity(loginReqDTO));
         //generate new Token
-        String jwtToken = jwtService.generateToken(user);
-        return new ResponseEntity<>(UserMapper.toDto(user, jwtToken), HttpStatus.OK);
+        String accessToken = jwtService.generateAccessToken(user);
+        return new ResponseEntity<>(UserMapper.toDto(accessToken, accessToken), HttpStatus.OK);
     }
 }

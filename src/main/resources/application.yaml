@@ -28,10 +28,20 @@ spring:
   liquibase:
     enabled: false
     change-log: classpath:/db/changelog-master.xml
-  security:
-    user:
-      name: admin
-      password: admin
+#  security:
+#    user:
+#      name: admin
+#      password: admin
+jwt:
+  secret-key: 7386885cc23117b408efad056e4f9e576d2f4262c4a2abd0e2de7ed3757a5281
+  access-token:
+    expiration: 86400000 #1 day
+  refresh-token:
+    expiration: 60480000 #7 day
+
+
+
+
 
 
 

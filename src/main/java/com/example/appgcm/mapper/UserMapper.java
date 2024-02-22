@@ -12,6 +12,9 @@ public class UserMapper {
                 .password(registerReqDto.password())
                 .userName(registerReqDto.userName())
                 .fullName(registerReqDto.fullName())
+                .identityNumber(registerReqDto.identityNumber())
+                .identityDocumentType(registerReqDto.identityDocumentType())
+                .nationality(registerReqDto.nationality())
                 .build();
     }
 
@@ -22,13 +25,10 @@ public class UserMapper {
                 .build();
     }
 
-    public static UserResDTO toDto(AppUser user, String token){
+    public static UserResDTO toDto(String accesstoken, String refreshToken){
         return UserResDTO.builder()
-                .accessToken(token)
-                .fullName(user.getFullName())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .roles(user.getRoles())
+                .accessToken(accesstoken)
+                .refreshToken(refreshToken)
                 .build();
     }
 }

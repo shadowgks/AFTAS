@@ -18,7 +18,7 @@ public class CustomExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ProblemDetail badCredentialsException(Exception ex){
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), ex.getMessage());
-        problemDetail.setProperty("access_denied", "Authentication Failure");
+        problemDetail.setProperty("bad_credentials", "Authentication Failure");
         return problemDetail;
     }
 
@@ -32,14 +32,14 @@ public class CustomExceptionHandler {
     @ExceptionHandler(SignatureException.class)
     public ProblemDetail signatureExceptionException(Exception ex){
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), ex.getMessage());
-        problemDetail.setProperty("access_denied", "JWT Signature not valid!");
+        problemDetail.setProperty("signature_exception", "JWT Signature not valid!");
         return problemDetail;
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
     public ProblemDetail expiredJwtExceptionException(Exception ex){
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), ex.getMessage());
-        problemDetail.setProperty("access_denied", "JWT token already expired!");
+        problemDetail.setProperty("expiredJwt_exception", "JWT token already expired!");
         return problemDetail;
     }
 }
