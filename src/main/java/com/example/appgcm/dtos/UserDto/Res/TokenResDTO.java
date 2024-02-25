@@ -1,12 +1,9 @@
 package com.example.appgcm.dtos.UserDto.Res;
 
-import com.example.appgcm.models.entity.Role;
 import lombok.Builder;
 
-import java.util.Set;
-
 @Builder
-public record UserResDTO(
+public record TokenResDTO(
         String accessToken,
         String refreshToken
 ){}

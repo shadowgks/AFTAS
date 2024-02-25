@@ -39,16 +39,15 @@ public class JwtService {
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails, Long expiration){
-        extraClaims.put("email", userDetails.getUsername());
         extraClaims.put("authorities", userDetails.getAuthorities()); // Assuming you have a method to get the user's role
         return Jwts.builder()
                 .setClaims(extraClaims)
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
-
 
     public boolean isTokenValid(String token, UserDetails userDetails){
         final String USERNAME = extractUsername(token);

@@ -1,5 +1,6 @@
 package com.example.appgcm.services.impls;
 
+import com.example.appgcm.dtos.CompetitionDto.CompetitionReqDto;
 import com.example.appgcm.models.entity.Competition;
 import com.example.appgcm.repositories.CompetitionRepository;
 import com.example.appgcm.dtos.CompetitionDto.CompetitionDto;
@@ -10,6 +11,7 @@ import com.example.appgcm.models.entity.embedded.MemberCompetition;
 import com.example.appgcm.repositories.RankingRepository;
 import com.example.appgcm.repositories.UserRepository;
 import com.example.appgcm.services.CompetitionService;
+import com.example.appgcm.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +27,7 @@ import java.util.Optional;
 @Service
 public class CompetitionServiceImpl implements CompetitionService {
     private final UserRepository userRepository;
+    private final UserService userService;
     private final CompetitionRepository competitionRepository;
     private final RankingRepository rankingRepository;
 
@@ -59,7 +62,9 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
     @Override
-    public Competition saveCompetition(CompetitionDto reqDto) {
+    public Competition saveCompetition(CompetitionReqDto reqDto) {
+        // Get User from the contextHolder
+        AppUser user = (AppUser) userService.authContextHolder();
         // Check date competition
         Optional<Competition> optionalCompetition = competitionRepository.findByDate(reqDto.date());
         if(optionalCompetition.isPresent()){
@@ -88,6 +93,7 @@ public class CompetitionServiceImpl implements CompetitionService {
                 .startTime(reqDto.startTime())
                 .numberOfParticipants(reqDto.numberOfParticipants())
                 .date(reqDto.date())
+                .user(user)
                 .build();
         return competitionRepository.save(competition);
     }
@@ -100,7 +106,7 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
     @Override
-    public Competition updateCompetition(Long id, CompetitionDto reqDto) {
+    public Competition updateCompetition(Long id, CompetitionReqDto reqDto) {
         Competition competition = competitionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Not found this Competition!"));
 

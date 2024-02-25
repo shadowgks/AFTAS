@@ -1,5 +1,6 @@
 package com.example.appgcm.services;
 
+import com.example.appgcm.dtos.CompetitionDto.CompetitionReqDto;
 import com.example.appgcm.models.entity.Competition;
 import com.example.appgcm.dtos.CompetitionDto.CompetitionDto;
 import com.example.appgcm.dtos.RegisterMemberOnCompetitionDto;
@@ -15,8 +16,8 @@ public interface CompetitionService {
     List<Competition> findAllCompetition();
     Competition findByDateCompetition(LocalDate date);
     Competition findByCodeCompetition(String code);
-    Competition saveCompetition(CompetitionDto competition);
+    Competition saveCompetition(CompetitionReqDto competition);
     void deleteCompetition(Long id);
-    Competition updateCompetition(Long id, CompetitionDto competitionDto);
+    Competition updateCompetition(Long id, CompetitionReqDto competitionDto);
     Ranking registerMember(RegisterMemberOnCompetitionDto reqDto);
 }

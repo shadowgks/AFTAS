@@ -1,5 +1,7 @@
 package com.example.appgcm.rest.controllers;
 
+import com.example.appgcm.dtos.CompetitionDto.CompetitionReqDto;
+import com.example.appgcm.dtos.CompetitionDto.CompetitionResDto;
 import com.example.appgcm.models.entity.Competition;
 import com.example.appgcm.dtos.CompetitionDto.CompetitionDto;
 import com.example.appgcm.dtos.RankingDto.Response.RankingResDto;
@@ -31,13 +33,14 @@ public class CompetitionController {
     private final CompetitionService competitionService;
 
     @PostMapping("/create")
-    public ResponseEntity<_Response<CompetitionDto>> createCompetition(@Valid @RequestBody CompetitionDto reqDto){
-        _Response<CompetitionDto> competitionDtoResponse = new _Response<>();
+    public ResponseEntity<_Response<CompetitionResDto>> createCompetition(@Valid @RequestBody CompetitionReqDto reqDto){
+        _Response<CompetitionResDto> competitionDtoResponse = new _Response<>();
         Competition createCompetition = competitionService.saveCompetition(reqDto);
         competitionDtoResponse.setResult(CompetitionMapper.mapToDto(createCompetition));
         competitionDtoResponse.setMessage("Created Competition Successfully");
         return new ResponseEntity<>(competitionDtoResponse, HttpStatus.CREATED);
     }
+
 
     @PostMapping("/register_member")
     public ResponseEntity<_Response<RankingResDto>> registerMember(@Valid @RequestBody RegisterMemberOnCompetitionDto reqDto){
@@ -64,8 +67,8 @@ public class CompetitionController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<_Response<List<CompetitionDto>>> getAllCompetition(){
-        _Response<List<CompetitionDto>> responseList = new _Response<>();
+    public ResponseEntity<_Response<List<CompetitionResDto>>> getAllCompetition(){
+        _Response<List<CompetitionResDto>> responseList = new _Response<>();
         List<Competition> competitionList = competitionService.findAllCompetition();
         responseList.setResult(competitionList
                 .stream().map(CompetitionMapper::mapToDto)
@@ -74,24 +77,24 @@ public class CompetitionController {
     }
 
     @GetMapping("/find-by-code/{code}")
-    public ResponseEntity<_Response<CompetitionDto>> getCompetitionByCode(@Valid @PathVariable("code") String code){
-        _Response<CompetitionDto> response = new _Response<>();
+    public ResponseEntity<_Response<CompetitionResDto>> getCompetitionByCode(@Valid @PathVariable("code") String code){
+        _Response<CompetitionResDto> response = new _Response<>();
         Competition competition = competitionService.findByCodeCompetition(code);
         response.setResult(CompetitionMapper.mapToDto(competition));
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/find-by-date/{date}")
-    public ResponseEntity<_Response<CompetitionDto>> getCompetitionByCode(@Valid @PathVariable("date") LocalDate date){
-        _Response<CompetitionDto> response = new _Response<>();
+    public ResponseEntity<_Response<CompetitionResDto>> getCompetitionByCode(@Valid @PathVariable("date") LocalDate date){
+        _Response<CompetitionResDto> response = new _Response<>();
         Competition competition = competitionService.findByDateCompetition(date);
         response.setResult(CompetitionMapper.mapToDto(competition));
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<_Response<CompetitionDto>> updateCompetitionByCode(@Valid @PathVariable("id") Long id, @RequestBody CompetitionDto reqDto){
-        _Response<CompetitionDto> response = new _Response<>();
+    public ResponseEntity<_Response<CompetitionResDto>> updateCompetitionByCode(@Valid @PathVariable("id") Long id, @RequestBody CompetitionReqDto reqDto){
+        _Response<CompetitionResDto> response = new _Response<>();
         Competition competition = competitionService.updateCompetition(id, reqDto);
         response.setResult(CompetitionMapper.mapToDto(competition));
         response.setMessage("Update Competition Successfully");
@@ -99,8 +102,8 @@ public class CompetitionController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<_Response<CompetitionDto>> deleteCompetitionById(@Valid @PathVariable("id") Long id){
-        _Response<CompetitionDto> response = new _Response<>();
+    public ResponseEntity<_Response<CompetitionResDto>> deleteCompetitionById(@Valid @PathVariable("id") Long id){
+        _Response<CompetitionResDto> response = new _Response<>();
         competitionService.deleteCompetition(id);
         response.setMessage("Deleted Competition Successfully");
         return ResponseEntity.ok(response);

@@ -3,16 +3,14 @@ package com.example.appgcm.models.entity;
 import com.example.appgcm.models.enums.IdentityDocumentType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @AllArgsConstructor
@@ -48,7 +46,6 @@ public class AppUser implements UserDetails {
     @JsonBackReference
     private List<Competition> competitionList;
 
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users-roles",
@@ -66,6 +63,7 @@ public class AppUser implements UserDetails {
                                 authorities.add(new SimpleGrantedAuthority(persmission.getSubject()+ ":" +persmission.getAction())))
         );
         System.out.println(authorities);
+        System.out.println(new Date());
         return authorities;
     }
 
@@ -96,6 +94,6 @@ public class AppUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isWorking;
     }
 }

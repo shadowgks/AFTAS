@@ -1,11 +1,13 @@
 package com.example.appgcm.mapper;
 
+import com.example.appgcm.dtos.CompetitionDto.CompetitionReqDto;
+import com.example.appgcm.dtos.CompetitionDto.CompetitionResDto;
 import com.example.appgcm.models.entity.Competition;
 import com.example.appgcm.dtos.CompetitionDto.CompetitionDto;
 
 public class CompetitionMapper {
-    public static CompetitionDto mapToDto(Competition competition){
-        return CompetitionDto.builder()
+    public static CompetitionResDto mapToDto(Competition competition){
+        return CompetitionResDto.builder()
                 .id(competition.getId())
                 .code(competition.getCode())
                 .date(competition.getDate())
@@ -18,14 +20,14 @@ public class CompetitionMapper {
                 .build();
     }
 
-//    public static Competition mapToEntity(CompetitionDto competitionDto){
-//        return Competition.builder()
-//                .date(competitionDto.date())
-//                .startTime(competitionDto.startTime())
-//                .amount(competitionDto.amount())
-//                .endTime(competitionDto.endTime())
-//                .location(competitionDto.location())
-//                .numberOfParticipants(competitionDto.numberOfParticipants())
-//                .build();
-//    }
+    public static Competition mapToEntity(CompetitionReqDto reqDto){
+        return Competition.builder()
+                .date(reqDto.date())
+                .startTime(reqDto.startTime())
+                .amount(reqDto.amount())
+                .endTime(reqDto.endTime())
+                .location(reqDto.location())
+                .numberOfParticipants(reqDto.numberOfParticipants())
+                .build();
+    }
 }

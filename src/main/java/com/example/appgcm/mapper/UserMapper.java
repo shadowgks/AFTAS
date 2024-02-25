@@ -2,7 +2,7 @@ package com.example.appgcm.mapper;
 
 import com.example.appgcm.dtos.UserDto.Req.LoginReqDTO;
 import com.example.appgcm.dtos.UserDto.Req.RegisterReqDTO;
-import com.example.appgcm.dtos.UserDto.Res.UserResDTO;
+import com.example.appgcm.dtos.UserDto.Res.TokenResDTO;
 import com.example.appgcm.models.entity.AppUser;
 
 public class UserMapper {
@@ -25,8 +25,8 @@ public class UserMapper {
                 .build();
     }
 
-    public static UserResDTO toDto(String accesstoken, String refreshToken){
-        return UserResDTO.builder()
+    public static TokenResDTO toDto(String accesstoken, String refreshToken){
+        return TokenResDTO.builder()
                 .accessToken(accesstoken)
                 .refreshToken(refreshToken)
                 .build();
