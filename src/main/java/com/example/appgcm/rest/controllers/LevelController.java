@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/level")
-@PreAuthorize("hasAuthority('s')")
+@PreAuthorize("hasAnyAuthority('ROLE:MANAGER', 'ROLE:JURY')")
 @RequiredArgsConstructor
 public class LevelController {
     private final LevelService levelService;

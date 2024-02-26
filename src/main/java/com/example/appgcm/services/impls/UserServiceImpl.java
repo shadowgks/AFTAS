@@ -98,12 +98,16 @@ public class UserServiceImpl implements UserService {
                 .identityDocumentType(userFound.getIdentityDocumentType())
                 .accessionDate(userFound.getAccessionDate())
                 .email(userFound.getEmail())
+                .nationality(userFound.getNationality())
                 .identityNumber(userFound.getIdentityNumber())
                 .password(userFound.getPassword())
-                .isWorking(req.getIsWorking())
+                .isWorking(req.getIsWorking() == null ? userFound.getIsWorking() : req.getIsWorking())
                 .build();
-
-        roleTypes.forEach(r -> roleRepository.findRoleByName(r).ifPresent(role -> user.setRoles(Set.of(role))));
+        if(req.getRoles() == null){
+            user.setRoles(userFound.getRoles());
+        }else{
+            roleTypes.forEach(r -> roleRepository.findRoleByName(r).ifPresent(role -> user.setRoles(Set.of(role))));
+        }
         return userRepository.save(user);
     }
 

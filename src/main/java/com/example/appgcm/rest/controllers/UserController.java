@@ -10,7 +10,9 @@ import com.example.appgcm.dtos.UserDto.Res.TokenResDTO;
 import com.example.appgcm.mapper.MemberMapper;
 import com.example.appgcm.mapper.TokenMapper;
 import com.example.appgcm.models.entity.RefreshToken;
+import com.example.appgcm.models.entity.Role;
 import com.example.appgcm.services.RefreshTokenService;
+import com.example.appgcm.services.RoleService;
 import com.example.appgcm.utils._Response;
 import jakarta.validation.Valid;
 import com.example.appgcm.mapper.UserMapper;
@@ -19,7 +21,10 @@ import com.example.appgcm.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/auth")
@@ -64,5 +69,7 @@ public class UserController {
         RefreshToken refreshToken = refreshTokenService.generateNewToken(TokenMapper.toEntity(request));
         return ResponseEntity.ok(TokenMapper.toDto(refreshToken));
     }
+
+
 
 }

@@ -34,9 +34,9 @@ public class JwtService {
         return generateToken(new HashMap<>(), userDetails, expirationAccessToken);
     }
 
-    public String generateRefreshToken(UserDetails userDetails){
-        return generateToken(new HashMap<>(), userDetails, expirationRefreshToken);
-    }
+//    public String generateRefreshToken(UserDetails userDetails){
+//        return generateToken(new HashMap<>(), userDetails, expirationRefreshToken);
+//    }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails, Long expiration){
         extraClaims.put("authorities", userDetails.getAuthorities()); // Assuming you have a method to get the user's role

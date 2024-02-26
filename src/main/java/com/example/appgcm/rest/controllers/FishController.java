@@ -17,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/fish")
+@PreAuthorize("hasAnyAuthority('ROLE:MANAGER', 'ROLE:JURY')")
 @RequiredArgsConstructor
 public class FishController {
     private final FishService fishService;

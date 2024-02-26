@@ -3,7 +3,6 @@ package com.example.appgcm.rest.controllers;
 import com.example.appgcm.dtos.CompetitionDto.CompetitionReqDto;
 import com.example.appgcm.dtos.CompetitionDto.CompetitionResDto;
 import com.example.appgcm.models.entity.Competition;
-import com.example.appgcm.dtos.CompetitionDto.CompetitionDto;
 import com.example.appgcm.dtos.RankingDto.Response.RankingResDto;
 import com.example.appgcm.dtos.RegisterMemberOnCompetitionDto;
 import com.example.appgcm.mapper.CompetitionMapper;
@@ -27,12 +26,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/competition")
-@PreAuthorize("hasAuthority('COMPETITION:ALL')")
 @RequiredArgsConstructor
 public class CompetitionController {
     private final CompetitionService competitionService;
 
     @PostMapping("/create")
+    @PreAuthorize("hasAnyAuthority('ROLE:MANAGER', 'ROLE:JURY')")
     public ResponseEntity<_Response<CompetitionResDto>> createCompetition(@Valid @RequestBody CompetitionReqDto reqDto){
         _Response<CompetitionResDto> competitionDtoResponse = new _Response<>();
         Competition createCompetition = competitionService.saveCompetition(reqDto);
@@ -43,6 +42,7 @@ public class CompetitionController {
 
 
     @PostMapping("/register_member")
+    @PreAuthorize("hasAnyAuthority('ROLE:MANAGER', 'ROLE:JURY')")
     public ResponseEntity<_Response<RankingResDto>> registerMember(@Valid @RequestBody RegisterMemberOnCompetitionDto reqDto){
         _Response<RankingResDto> response = new _Response<>();
         Ranking ranking = competitionService.registerMember(reqDto);
@@ -52,6 +52,7 @@ public class CompetitionController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('ROLE:MANAGER', 'ROLE:JURY', 'ROLE:ADHERENT')")
     public ResponseEntity<_Response<Map<String ,Page<Competition>>>> getAllCompetitionPageble(@RequestParam Optional<String> location,
                                                                                               @RequestParam Optional<Integer> numPage,
                                                                                               @RequestParam Optional<Integer> size){
@@ -67,6 +68,7 @@ public class CompetitionController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasAnyAuthority('ROLE:MANAGER', 'ROLE:JURY', 'ROLE:ADHERENT')")
     public ResponseEntity<_Response<List<CompetitionResDto>>> getAllCompetition(){
         _Response<List<CompetitionResDto>> responseList = new _Response<>();
         List<Competition> competitionList = competitionService.findAllCompetition();
@@ -77,6 +79,7 @@ public class CompetitionController {
     }
 
     @GetMapping("/find-by-code/{code}")
+    @PreAuthorize("hasAnyAuthority('ROLE:MANAGER', 'ROLE:JURY', 'ROLE:ADHERENT')")
     public ResponseEntity<_Response<CompetitionResDto>> getCompetitionByCode(@Valid @PathVariable("code") String code){
         _Response<CompetitionResDto> response = new _Response<>();
         Competition competition = competitionService.findByCodeCompetition(code);
@@ -85,6 +88,7 @@ public class CompetitionController {
     }
 
     @GetMapping("/find-by-date/{date}")
+    @PreAuthorize("hasAnyAuthority('ROLE:MANAGER', 'ROLE:JURY', 'ROLE:ADHERENT')")
     public ResponseEntity<_Response<CompetitionResDto>> getCompetitionByCode(@Valid @PathVariable("date") LocalDate date){
         _Response<CompetitionResDto> response = new _Response<>();
         Competition competition = competitionService.findByDateCompetition(date);
@@ -93,6 +97,7 @@ public class CompetitionController {
     }
 
     @PutMapping("{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE:MANAGER', 'ROLE:JURY')")
     public ResponseEntity<_Response<CompetitionResDto>> updateCompetitionByCode(@Valid @PathVariable("id") Long id, @RequestBody CompetitionReqDto reqDto){
         _Response<CompetitionResDto> response = new _Response<>();
         Competition competition = competitionService.updateCompetition(id, reqDto);
@@ -102,6 +107,7 @@ public class CompetitionController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE:MANAGER', 'ROLE:JURY')")
     public ResponseEntity<_Response<CompetitionResDto>> deleteCompetitionById(@Valid @PathVariable("id") Long id){
         _Response<CompetitionResDto> response = new _Response<>();
         competitionService.deleteCompetition(id);

@@ -5,6 +5,8 @@ import com.example.appgcm.dtos.UserDto.Req.RoleReqDTO;
 import com.example.appgcm.dtos.UserDto.Res.MemberResDto;
 import com.example.appgcm.mapper.MemberMapper;
 import com.example.appgcm.mapper.RoleMapper;
+import com.example.appgcm.models.entity.Role;
+import com.example.appgcm.services.RoleService;
 import com.example.appgcm.utils._Response;
 import com.example.appgcm.models.entity.AppUser;
 import com.example.appgcm.services.UserService;
@@ -24,6 +26,7 @@ import java.util.List;
 @PreAuthorize("hasAnyAuthority('ROLE:MANAGER')")
 public class MemberController {
     private final UserService userService;
+    private final RoleService roleService;
 
     @PostMapping("/create")
     public ResponseEntity<_Response<MemberResDto>> createMember(@Valid @RequestBody MemberReqDto reqDto){
@@ -70,6 +73,14 @@ public class MemberController {
         _Response<MemberResDto> response = new _Response<>();
         userService.updateUser(identityOrEnabled, RoleMapper.toEntity(reqDto));
         response.setMessage("Updated Successfully");
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/all-roles")
+    public ResponseEntity<_Response<List<Role>>> getAllRole(){
+        _Response<List<Role>> response = new _Response<>();
+        List<Role> roles = roleService.getAllRoles();
+        response.setResult(roles);
         return ResponseEntity.ok(response);
     }
 

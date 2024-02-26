@@ -13,9 +13,14 @@ public class MemberMapper {
     public static MemberResDto mapToDto(AppUser user){
         return MemberResDto.builder()
                 .fullName(user.getFullName())
+                .userName(user.getUserNamee())
+                .email(user.getEmail())
                 .nationality(user.getNationality())
+                .accessionDate(user.getAccessionDate())
                 .identityDocumentType(user.getIdentityDocumentType())
                 .identityNumber(user.getIdentityNumber())
+                .isWorking(user.getIsWorking())
+                .role(user.getRoles())
                 .build();
     }
 

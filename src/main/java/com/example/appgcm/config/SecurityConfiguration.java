@@ -37,14 +37,7 @@ public class SecurityConfiguration {
                                 .permitAll().anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-//                .exceptionHandling(exception ->
-//                        exception.authenticationEntryPoint((request, response, ex) ->
-//                            response.sendError(
-//                                    HttpServletResponse.SC_UNAUTHORIZED,
-//                                    ex.getMessage())
-//                        ))
-                            ;
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
